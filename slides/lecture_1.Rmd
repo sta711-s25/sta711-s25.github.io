@@ -8,7 +8,7 @@ output: beamer_presentation
 
 **Dengue fever:** a mosquito-borne viral disease affecting 400 million people a year
 
-<img src="DengueSymptomsUpdated.jpg" alt="drawing" width="350"/>
+![](DengueSymptomsUpdated.jpg)
 
 
 ## Motivating example: Dengue data
