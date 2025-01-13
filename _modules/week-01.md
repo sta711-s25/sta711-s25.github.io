@@ -3,6 +3,9 @@ title: Binary data and logistic regression
 ---
 
 January 13
+: Class cancelled (weather)
+
+January 15
 : Welcome to STA 711, Intro to logistic regression
   : [Slides](https://sta711-s25.github.io/slides/lecture_1.pdf)
   
@@ -12,8 +15,5 @@ January 13
 : **Homework 1 released**{: .label .label-yellow }
   : [HW 1](https://sta711-s25.github.io/homework/HW1.pdf)
 
-January 15
-: Fitting and interpreting logistic regression models
-
 January 17
-: Likelihoods, maximum likelihood estimation
+: Fitting and interpreting logistic regression models
