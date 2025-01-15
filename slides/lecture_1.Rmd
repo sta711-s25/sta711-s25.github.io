@@ -141,5 +141,5 @@ $$\log \left(\dfrac{\widehat{p}_i}{1 - \widehat{p}_i}\right) = 1.737 - 0.361 \ W
 Work in groups of 2-3 for 5 minutes on the following questions:
 
 * Are patients with a higher WBC more or less likely to have dengue?
-* Interpret the estimated slope in context of a unit change in the log odds.
+* What is the change in the log odds associated with a unit increase in WBC?
 * What is the change in *odds* asociated with a unit increase in WBC?
