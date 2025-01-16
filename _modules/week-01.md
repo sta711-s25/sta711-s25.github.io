@@ -17,3 +17,4 @@ January 15
 
 January 17
 : Fitting and interpreting logistic regression models
+  : [Slides](https://sta711-s25.github.io/slides/lecture_2.pdf)
