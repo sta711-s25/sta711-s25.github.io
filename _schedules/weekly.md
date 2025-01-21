@@ -32,7 +32,16 @@ schedule:
         start: 10:00 AM
         end: 10:50 AM
         location: Manchester 384
+      - name: Office Hours
+        start: 2:00 PM
+        end: 3:00 PM
+        location: Manchester 329
   - name: Thursday
+    events:
+       - name: Office Hours
+        start: 9:30 AM
+        end: 10:30 AM
+        location: Manchester 329
   - name: Friday
     events:
       - name: STA 711 Class
