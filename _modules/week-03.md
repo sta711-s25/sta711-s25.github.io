@@ -10,6 +10,7 @@ January 27
   
 January 29
 : Maximum likelihood estimation for logistic regression
+  : [Slides](https://sta711-s25.github.io/slides/lecture_6.pdf)
   
 :  Casella and Berger 6.3, 7.2.2
 
