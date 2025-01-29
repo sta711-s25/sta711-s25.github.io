@@ -16,6 +16,8 @@ $$L(\beta | {\bf X}, {\bf Y}) \propto \prod \limits_{i=1}^n f(Y_i| \beta, X_i)$$
 
 ## Newton's method
 
+## Newton's method for logistic regression
+
 ## Example
 
 Suppose that $\log \left( \dfrac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 X_{i}$, and we have
