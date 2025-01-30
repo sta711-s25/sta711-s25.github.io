@@ -1,0 +1,111 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+STA 711 Homework 3\\
+\normalsize
+\vspace{5mm}
+\end{center}
+
+\noindent \textbf{Due:} Friday, February 7, 10:00am on Canvas.\\ 
+
+\noindent \textbf{Instructions:} Submit your work as a single PDF. You may choose to either hand-write your work and submit a PDF scan, or type your work using LaTeX and submit the resulting PDF. See the course website for a \href{https://sta711-s25.github.io/homework/hw_template.tex}{homework template file} and \href{https://sta711-s25.github.io/homework/latex_instructions/}{instructions} on getting started with LaTeX and Overleaf.
+
+\section*{Looking towards Generalized Linear Models}
+
+So far, you have seen linear regression and logistic regression models, which each deal with different types of response variables. The same ideas can be generalized to a wider variety of response distributions; this is exactly what a \textit{generalized linear model} does. Linear regression (with normal errors), logistic regression, Poisson regression, gamma regression, and other models are all examples of generalized linear models.\\
+
+\noindent In this part of the assignment, we will work towards defining a generalized linear model, with linear and logistic regression as special cases.
+
+\begin{enumerate}
+\item To define a generalized linear model, we need a general form for the distribution of our response variable. Consider a random variable (either discrete or continuous) with probability function
+\begin{align*}
+f(y; \theta, \phi) = a(y, \phi) \exp\left\lbrace\frac{y \theta - \kappa(\theta)}{\phi}\right\rbrace,
+\end{align*}
+where $\theta \in \mathbb{R}$ is called the \textit{canonical parameter}, and $\phi > 0$ is called the \textit{dispersion parameter}. The function $a(y, \phi)$ depends only on $y$ and $\phi$ (not on $\theta$). The function $\kappa(\theta)$ depends only on $\theta$ (not on $y$ or $\phi$). \\
+
+\noindent A probability function which can be written in this way is called an \textit{exponential dispersion model} (EDM). We will describe each piece of $f(y; \theta, \phi)$ in the problems below.
+
+\begin{enumerate}
+\item Show that the $N(\mu, \sigma^2)$ pdf can be written in the EDM form: identify $\theta$, $\phi$, and $\kappa$.
+
+\item Show that the $Bernoulli(p)$ pmf can be written in the EDM form: identify $\theta$, $\phi$, and $\kappa$.
+
+\item Show that the $Poisson(\lambda)$ pmf can be written in the EDM form: identify $\theta$, $\phi$, and $\kappa$.
+\end{enumerate}
+
+\item Suppose that $Y \sim f(y; \theta, \phi)$ comes from an exponential dispersion model. Let $\mu = \mathbb{E}[Y]$; then $\theta = g(\mu)$ for some function $g$.
+
+\begin{enumerate}
+\item If $Y \sim N(\mu, \sigma^2)$, find the function $g$ (in terms of $\mu$).
+\item If $Y \sim Bernoulli(p)$, find the function $g$ (in terms of $p$).
+\item If $Y \sim Poisson(\lambda)$, find the function $g$ (in terms of $\lambda$).
+\end{enumerate}
+
+\item The \textit{cumulant generating function} (CGF) for a random variable $Y$ is given by $C(t) = \log M(t) = \log \mathbb{E}[e^{tY}]$ (i.e., the log of the moment generating function).
+
+\begin{enumerate}
+\item Using properties of the MGF, show that 
+\begin{align*}
+\frac{d}{dt} C(t) \biggr\rvert_{t=0} &= \mathbb{E}[Y] \\
+\frac{d^2}{dt^2} C(t) \biggr\rvert_{t=0} &= Var(Y)
+\end{align*}
+
+\item Show that if the distribution of $Y$ is an exponential dispersion model (with probability function $f(y; \theta, \phi)$ above), then
+\begin{align*}
+C(t) = \frac{\kappa(\theta + t\phi) - \kappa(\theta)}{\phi}
+\end{align*}
+
+\item Suppose that the distribution of $Y$ is an exponential dispersion model (with probability function $f(y; \theta, \phi)$ above), and let $\mu = \mathbb{E}[Y]$. Show that
+\begin{align*}
+\mu := \mathbb{E}[Y] = \frac{d}{d\theta} \kappa(\theta)
+\end{align*}
+and
+\begin{align*}
+Var(Y) = \phi \frac{d^2}{d \theta^2} \kappa(\theta)
+\end{align*}
+(For this reason, $\kappa$ is called the \textit{cumulant} function, because derivatives of $\kappa$ are related to the cumulants of $Y$).
+
+\end{enumerate}
+
+\item Suppose we observe $Y_1,...,Y_n \overset{iid}{\sim} f(y; \theta, \phi)$ from an exponential dispersion model.  Let $\mu = \mathbb{E}[Y]$; then $\theta = g(\mu)$ for some continuous, monotone increasing $g$. Find the maximum likelihood estimates $\widehat{\mu}$ and $\widehat{\theta}$ (one or both of your answers might involve $g$).
+
+\item Suppose that $(X_1, Y_1),...,(X_n, Y_n)$ are an iid sample from the following model:
+\begin{align*}
+Y_i \sim EDM(\theta_i, \phi) \\
+\theta_i = g(\mu_i) = \beta^T X_i,
+\end{align*}
+where $Y_i \in \mathbb{R}$ is the $i$th response, $X_i \in \mathbb{R}^p$ is the vector of observed covariates for the $i$th individual, and $\beta \in \mathbb{R}^p$ is the vector of regression coefficients.\\
+
+\noindent So: the distribution of $Y_i$ is an exponential dispersion model; the dispersion parameter $\phi$ is the same for all $Y_i$; and the parameter $\theta_i$ (and so also the mean $\mu_i = \mathbb{E}[Y_i | X_i]$) depends on $X_i$.
+
+\begin{enumerate}
+\item Using your answers to questions 1 and 2, explain how linear regression (with normal errors) and logistic regression are both special cases of the model described here.
+
+\item To estimate the coefficient vector $\beta$, we will use maximum likelihood estimation. Generally, there is no closed-form solution, so we must resort to an iterative algorithm like Newton's method. Show that
+\begin{align*}
+U(\beta | X, Y) &= \frac{1}{\phi} X^T(Y - \mu) \\
+{\bf H}(\beta | X, Y) &= -X^T W X
+\end{align*}
+where $X$ is the design matrix, $Y = (Y_1,...,Y_n)^T \in \mathbb{R}^n$ is the vector of observed responses, $\mu = (\mu_1,...,\mu_n)^T$ with $\mu_i = g^{-1}(\beta^T X_i)$, and $W = \frac{1}{\phi^2} \text{diag}(Var(Y_i))$.
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}

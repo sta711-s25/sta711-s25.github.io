@@ -1,0 +1,22 @@
+---
+title: "Lecture 7: Maximum likelihood estimation for logistic regression"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Recall: Newton's method
+
+## Newton's method for logistic regression
+
+## Example
+
+Suppose that $\log \left( \dfrac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 X_{i}$, and we have
+
+$$\beta^{(r)} = \begin{bmatrix} -3.1 \\ 0.9 \end{bmatrix}, \hspace{1cm} U(\beta^{(r)}) = \begin{bmatrix} 9.16 \\ 31.91 \end{bmatrix},$$
+$${\bf H}(\beta^{(r)}) = -\begin{bmatrix} 17.834 & 53.218 \\ 53.218 & 180.718 \end{bmatrix}$$
+
+Use Newton's method to calculate $\beta^{(r + 1)}$ (you may use R or a calculator, you do not need to do the matrix arithmetic by hand).
+
+\vspace{3cm}
+
+## Checking the solution is a unique maximum

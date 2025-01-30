@@ -16,3 +16,7 @@ January 29
 
 January 31
 : Newton's method for logistic regression
+  : [Slides](https://sta711-s25.github.io/slides/lecture_7.pdf)
+  
+: **Homework 3 released**{: .label .label-yellow }
+  : [HW 3](https://sta711-s25.github.io/homework/HW3.pdf)
