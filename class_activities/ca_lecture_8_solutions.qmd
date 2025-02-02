@@ -1,0 +1,69 @@
+---
+title: "Class Activity Solutions"
+format: 
+  html:
+    embed-resources: true
+editor: source
+author: "Ciaran Evans"
+---
+
+### Initializing some data
+
+```{r}
+set.seed(711)
+
+n <- 500 # sample size
+beta_true <- c(-1, 2) # true beta
+x <- runif(n)
+X <- cbind(1, x) # design matrix
+p_true <- exp(X %*% beta_true)/(1 + exp(X %*% beta_true))  # true probabilities
+y <- rbinom(n, 1, p_true)
+
+glm(y ~ x, family = binomial) |> 
+  summary()
+```
+
+### Writing score and hessian functions
+
+```{r}
+score <- function(beta, X, y){
+  p_hat <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+  return(t(X) %*% (y - p_hat))
+}
+
+hessian <- function(beta, X, y){
+  p_hat <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+  return(-1 * t(X) %*% diag(p_hat*(1 - p_hat)) %*% X)
+}
+
+beta_init <- c(log(mean(y)/(1 - mean(y))), rep(0, ncol(X) - 1))
+score(beta_init, X, y)
+hessian(beta_init, X, y)
+```
+
+### Writing a function to implement Newton's method
+
+```{r}
+# Newton's method for logistic regression
+newtons_method <- function(X, y){
+  beta <- c(log(mean(y)/(1 - mean(y))), rep(0, ncol(X) - 1))
+  p_hat <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+  log_lik_new <- sum(dbinom(y, 1, p_hat, log=T))
+  
+  # change in lok-likelihood
+  ll_diff <- 1
+  while(abs(ll_diff) > 1e-3){
+    log_lik_old <- log_lik_new
+    beta <- beta - solve(hessian(beta, X, y)) %*% score(beta, X, y)
+    p_hat <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+    log_lik_new <- sum(dbinom(y, 1, p_hat, log=T))
+    ll_diff <- sqrt(sum((log_lik_old - log_lik_new)^2))
+  }
+  return(beta)
+}
+
+newtons_method(X, y)
+```
+
+
+

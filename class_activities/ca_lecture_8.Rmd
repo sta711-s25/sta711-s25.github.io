@@ -1,0 +1,163 @@
+---
+title: "Class activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Newton's method for regression models
+
+Suppose we have $n$ observations $(X_1, Y_1),...,(X_n, Y_n)$ from the logistic regression model
+$$Y_i \sim Bernoulli(p_i)$$
+$$\log \left( \frac{p_i}{1 - p_i} \right) = \beta^T X_i$$
+
+where $\beta = (\beta_0, \beta_1, ..., \beta_k)^T \in \mathbb{R}^{k+1}$ is the vector of coefficients for the population model. The true parameter vector $\beta$ is unknown, but we can estimate $\beta$ by maximizing the log-likelihood $\ell(\beta | X, Y)$.
+
+Unfortunately, there is usually no closed form solution for the MLE $\widehat{\beta}$. Instead, we need to use an iterative algorithm like *Newton's method* to maximize the likelihood.
+
+Let $U(\beta | X, Y) = \frac{\partial}{\partial \beta} \ell(\beta | X, Y)$ be the score function, and $H(\beta | X, Y) = \frac{\partial}{\partial \beta} U(\beta | X, Y)$ the Hessian. To approximate the value $\beta^*$ for which $U(\beta^* | X, Y) = 0$, Newton's method consists of the following steps:
+
+1. Let $\beta^{(0)}$ be an initial guess
+2. For each step $r$ of the algorithm, update: $\beta^{(r+1)} = \beta^{(r)} - H(\beta^{(r)} | X, Y)^{-1} U(\beta^{(r)} | X, Y)$
+3. Continue updating until the algorithm converges
+
+## Application to logistic regression
+
+For logistic regression models, we have shown that:
+
+$$U(\beta | X, Y) = X^T(Y - p)$$
+$$H(\beta | X, Y) = -X^T WX$$
+where $p = (p_1,...,p_n)^T \in \mathbb{R}^n$, and $W = \text{diag}(p_1(1 - p_1),...,p_n(1 - p_n))$.
+
+Here, $X$ is the design matrix, $Y = (Y_1,...,Y_n)^T \in \mathbb{R}^n$ is the vector of observed responses, and the probabilities $p_i$ are a function of $\beta$. For example, given estimates $\beta^{(r)}$ for the $r$th iteration of Newton's method, 
+
+$$U(\beta^{(r)} | X, Y) = X^T(Y - p^{(r)}),$$
+
+where $p_i^{(r)} = \dfrac{\exp\{\beta^{(r)T} X_i\}}{1 + \exp\{\beta^{(r)T} X_i\}}$
+
+## Initialization and convergence
+
+Given the score and the Hessian, we now know how to update our estimates from Newton's method. It only remains to define the initial guess $\beta^{(0)}$ and the convergence criterion.
+
+A common choice for $\beta^{(0)}$ is $\beta^{(0)} = (\log(\bar{Y}/(1 - \bar{Y})), 0, 0,...,0)^T$ (i.e., make $\beta_0^{(0)}$ the logit of the sample mean, and assume all other coefficients are 0).
+
+For the purposes of this activity, to define convergence, we will stop the algorithm when $||\ell(\beta^{(r+1)} | X, Y) - \ell(\beta^{(r)} | X, Y)|| < 1 \times 10^{-3}$.
+
+# Implementation in R
+
+R implements Newton's method (in a form called *Fisher scoring*) in the `glm` function. In this activity, however, you will implement Newton's method yourself!
+
+## Getting started
+
+The following code simulates data from a simple logistic regression model with $\beta = (-1, 2)^T$. I have arbitrarily chosen a uniform distribution for $X_i$.
+
+```{r}
+set.seed(711)
+
+n <- 500 # sample size
+beta_true <- c(-1, 2) # true beta
+x <- runif(n)
+X <- cbind(1, x) # design matrix
+p_true <- exp(X %*% beta_true)/(1 + exp(X %*% beta_true))  # true probabilities
+y <- rbinom(n, 1, p_true)
+```
+
+We can use R's `glm` function to see what $\widehat{\beta}$ should be:
+
+```{r}
+glm(y ~ x, family = binomial) |> 
+  summary()
+```
+
+Now, our goal is to implement Newton's method ourselves!
+
+## Some helpful R hints
+
+* `t()` calculates transposes of matrices
+* `solve()` calculates inverses
+* `%*%` performs matrix multiplication
+* Diagonal matrices can be created with the `diag` function. For example, `diag(c(1, 2, 3))` creates a diagonal matrix with the entries 1, 2, 3 on the diagonal
+
+## Questions
+
+1. If your response vector is `y`, and your design matrix is `X`, then use the following code to create $\beta^{(0)}$:
+
+```r
+beta_init <- c(log(mean(y)/(1 - mean(y))), rep(0, ncol(X) - 1))
+```
+
+2. Write a function called `score` to calculate $U(\beta | X, Y)$ for a logistic regression model. Your function should take $\beta$, $X$, and $Y$ as arguments, and return the score. Here is a skeleton of the code to get you started:
+
+```r
+score <- function(beta, X, y){
+
+}
+```
+
+For the data simulated above, `score(beta_init, X, y)` should return
+
+```{r, echo=F}
+score <- function(beta, X, y){
+  p_hat <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+  return(t(X) %*% (y - p_hat))
+}
+
+hessian <- function(beta, X, y){
+  p_hat <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+  return(-1 * t(X) %*% diag(p_hat*(1 - p_hat)) %*% X)
+}
+
+beta0 <- c(log(mean(y)/(1 - mean(y))), rep(0, ncol(X) - 1))
+score(beta0, X, y)
+```
+
+
+3. Write a function called `hessian` to calculate $H(\beta | X, Y)$ for a logistic regression model. Your function should take $\beta$, $X$, and $Y$ as arguments, and return the hessian. Here is a skeleton of the code to get you started:
+
+```r
+hessian <- function(beta, X, y){
+
+}
+```
+
+For the data simulated above, `hessian(beta_init, X, y)` should return
+
+```{r, echo=F}
+hessian(beta0, X, y)
+```
+
+
+
+4. Perform one iteration of Newton's method to calculate $\beta^{(1)}$ for the data simulated above.
+
+5. Use a `while` loop to repeat Newton's method until convergence. 
+
+* If your response vector is `y`, and you have a vector of probability estimates `p_hat`, then the following code will calculate the log-likelihood:
+
+```r
+sum(dbinom(y, 1, p_hat, log=T))
+```
+
+6. Wrap questions 1, 4, and 5 into a function called `newtons_method`, to implement Newton's method for a logistic regression model. Your function should take $X$ and $Y$ as arguments, and return the final coefficient estimates $\widehat{\beta}$. 
+
+
+## If you finish early
+
+If you're done early, congrats! You have successfully implemented Newton's method for logistic regression in R. Next, try Poisson regression:
+
+$$Y_i \sim Poisson(\lambda_i)$$
+
+$$\log(\lambda_i) = \beta^T X_i$$
+
+You can show (and probably will on HW!) that for Poisson regression,
+
+$$U(\beta | X, y) = X^T(Y - \lambda)$$
+
+$$H(\beta | X, y) = -X^T W X$$
+
+where $\lambda = (\lambda_1,...,\lambda_n)$ and $W = \text{diag}(\lambda_1,...,\lambda_n)$.
+
+
+
