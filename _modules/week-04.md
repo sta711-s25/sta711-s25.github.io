@@ -8,6 +8,7 @@ February 3
   
 February 5
 : Fisher information
+  : [Slides](https://sta711-s25.github.io/slides/lecture_8.pdf)
 
 February 7
 : Fisher information and Fisher scoring
