@@ -8,5 +8,7 @@ photo: ciaran.jpg
 
 Office hours: 
 
-Wednesday 2--3pm
-Thursday 9:30 -- 10:30am
+* Monday 1-2pm
+* Wednesday 2--3pm
+* Thursday 9:30 -- 10:30am
+* Thursday 1-2pm
