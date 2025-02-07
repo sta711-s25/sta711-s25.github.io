@@ -1,0 +1,195 @@
+---
+title: "Class activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Inference for logistic regression models
+
+## Testing a single coefficient
+
+To test a single coefficient in a logistic regression model, we typically use a *Wald test*. A Wald test leverages the fact that, if the model assumptions are satisfied, the estimated coefficients for a logistic regression model are approximately normal:
+
+$$\widehat{\beta} \approx N(\beta, \ \mathcal{I}^{-1}(\beta))$$
+Suppose we observe data $(X_1, Y_1), ..., (X_n, Y_n)$ from the following logistic regression model:
+
+$$Y_i \sim Bernoulli(p_i)$$
+
+$$\log \left( \frac{p_i}{1 - p_i} \right) = \beta^T X_i$$
+We have demonstrated in class that $\mathcal{I}(\beta) = X^T W X$, with $W = \text{diag}(p_i(1 - p_i))$.
+
+The code below generates data with a single explanatory variable, fits a logistic regression model, and reports the estimated coefficients and the estimated standard errors:
+
+```{r}
+set.seed(11)
+
+n <- 100
+beta <- c(-1, 1)
+x <- rnorm(n)
+X <- cbind(1, x)
+p <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+
+y <- rbinom(n, 1, p)
+  
+m1 <- glm(y ~ x, family = binomial)
+summary(m1)$coefficients
+```
+
+In this case, $\widehat{\beta}_1 = 0.915$, and $\widehat{SE}(\widehat{\beta}_1) = 0.274$.
+
+Where does this estimated standard error come from? It is the square root of the second diagonal entry of $(X^T \widehat{W} X)^{-1}$, where $\widehat{W} = \text{diag}(\widehat{p}_i (1 - \widehat{p}_i))$. Note that the *estimated* probabilities are being used, because for real datasets we won't know the true probabilities (we only know the true probabilities here because we simulated the data).
+
+:::{.question}
+#### Question 1
+
+The estimated inverse information matrix $(X^T \widehat{W} X)^{-1}$ can be obtained from the fitted model by `vcov(m1)` (`vcov` is short for *variance-covariance* matrix). Compute the estimate $(X^T \widehat{W} X)^{-1}$ yourself (constructing $X$ and $\widehat{W}$), and verify that `vcov(m1)` agrees with your calculations.
+
+* Note: you can get the vector of estimated probabilities $\widehat{p}_i$ in R with 
+
+```{r, eval=F}
+m1$fitted.values
+```
+:::
+
+:::{.question}
+#### Question 2
+
+Verify that the [2,2] entry of $(X^T \widehat{W} X)^{-1}$ is equal to $0.0748 = 0.2735^2$ (there may be some small differences due to rounding).
+:::
+
+Now let's verify that the distribution of $\widehat{\beta}_1$ is approximately normal, with the desired mean and variance.
+
+:::{.question}
+#### Question 3
+
+Using a `for` loop and the code above, simulate `nsim = 5000` different datasets in R. For each dataset, fit the logistic regression model, and store the estimated slope $\widehat{\beta}_1$. For now, use the same $X$ for each simulation (that is, do not re-sample $X$ at each iteration of the loop -- only resample the response $Y$).
+:::
+
+:::{.question}
+#### Question 4
+
+Use a QQ plot to compare your estimated slopes $\widehat{\beta}_1$ from question 3 to a normal distribution. Does a normal distribution appear to be a good fit?
+
+*Making a QQ plot*: here is an example of making a QQ plot to compare a sample `v` to a normal distribution:
+
+```{r}
+v <- rnorm(100)
+qqnorm(v)
+qqline(v)
+```
+
+
+
+:::
+
+:::{.question}
+#### Question 5
+
+Calculate the mean of your simulated slopes $\widehat{\beta}_1$ from question 3. Is the mean close to the true coefficient $\beta_1 = 1$? 
+:::
+
+$Var(\widehat{\beta}_1)$ should be approximately $[(X^T W X)^{-1}]_{2,2}$ (the [2,2] entry of the inverse Fisher information). Here, $(X^T W X)^{-1}$ uses the *true* probabilities $p_i$, rather than the estimated probabilities $\widehat{p}_i$. Because we simulated the data, we can calculate the actual Fisher information $X^T W X$, not just the estimated Fisher information $X^T \widehat{W} X$.
+
+:::{.question}
+#### Question 6
+
+Calculate the variance of your simulated slopes $\widehat{\beta}_1$ from question 3. Is the variance close to the theoretical value $[(X^T W X)^{-1}]_{2,2}$? 
+:::
+
+:::{.question}
+#### Question 7
+
+Repeat questions 3--6 for different sample sizes $n$ (consider $n = 50, 100, 200$, etc.). Does the theoretical normal distribution do a better or worse job at approximating the distribution of $\widehat{\beta}_1$ when $n$ increases?
+:::
+
+
+
+
+## Preview: Inference for multiple coefficients
+
+Now, what if we want to test hypotheses about *multiple* coefficients *simultaneously*? A common method is something called a *likelihood ratio test*. We will spend a lot of time on likelihood ratio testing later in the semester; for now, we will take a sneak peek at how likelihood ratio tests behave, which will motivate our coming hypothesis testing work.
+
+Consider the model
+
+$$Y_i \sim Bernoulli(p_i)$$
+$$\log \left( \frac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 X_{i,1} + \beta_2 X_{i,2}$$
+and suppose we want to test
+
+$$H_0: \beta_1 = \beta_2 = 0 \hspace{1cm} H_A: \text{at least one of } \beta_1, \beta_2 \neq 0$$
+
+To test these hypotheses, let $L_{full}$ be the likelihood for the full model (in this case, that means both $X_{i,1}$ and $X_{i,2}$ are in the model), and let $L_{reduced}$ be the likelihood for the reduced model (in this case, that is the intercept-only model). The likelihood ratio test statistic is:
+
+$$G = 2(\log L_{full} - \log L_{reduced})$$
+
+Under certain assumptions, if $H_0$ is *true* then $G \sim \chi^2_q$, where $q$ is the number of parameters we are testing. In this example, $q = 2$.
+
+For GLMs like logistic regression, the LRT statistic is calculated through a value called the *deviance*. For logistic regression, $\text{deviance} = -2\log L$. Let's simulate some data and fit the logistic regression model. Since we want to examine the behavior of $G$ under $H_0$, we will simulate data for which $\beta_1 = \beta_2 = 0$.
+
+```{r}
+set.seed(23)
+
+n <- 100
+beta <- c(-1, 0, 0)
+x1 <- rnorm(n)
+x2 <- rnorm(n)
+X <- cbind(1, x1, x2)
+p <- exp(X %*% beta)/(1 + exp(X %*% beta))
+y <- rbinom(n, 1, p)
+  
+m1 <- glm(y ~ x1 + x2, family = binomial)
+summary(m1)
+```
+
+In this summary output, the *deviance* of the fitted model (called the *residual deviance* in R) is $90.438$. To test $H_0: \beta_1 = \beta_2 = 0$, we will compare $90.438$ to the deviance of the reduced model. In this example, the reduced model is the intercept-only model; and the deviance of the intercept-only model is always reported by R as the *null deviance*.
+
+So, our test statistic is
+
+```{r}
+m1$null.deviance - m1$deviance
+```
+
+Is this a big change? We calculate a p-value by comparing this value to a $\chi^2_2$ distribution (remember we are testing 2 coefficients).
+
+```{r}
+pchisq(m1$null.deviance - m1$deviance, 2, lower.tail=F)
+```
+
+That's a very large p-value! We have very little evidence against $H_0$.
+
+
+:::{.question}
+#### Question 8
+
+Repeat the code above many times, calculating the LRT statistic (`m1$null.deviance - m1$deviance`) each time. Does the $\chi^2_2$ distribution seem like a good approximation?
+
+*Note*: one way to compare a sample to a theoretical distribution is with the empirical cdf (the estimate of the cdf from the sample). Here is an example (estimated cdf in black, true cdf in orange):
+
+```{r}
+v <- rchisq(1000, 2)
+gridpts <- seq(0, 10, 0.01)
+plot(gridpts, ecdf(v)(gridpts), type="l", xlab = "x", ylab = "cdf")
+lines(gridpts, pchisq(gridpts, 2), col="orange")
+```
+:::
+
+
+## Inference with a random X
+
+So far, we have kept $X$ fixed in our simulations (i.e., we have ignored the fact that really, $X$ should be random). If we account for the randomness of $X$, what do we need to change?
+
+Well, $Var(\widehat{\beta})$ should no longer be $(X^T W X)^{-1}$, because $X$ is random! We need to consider the distribution of the observations $X_i$ too. It turns out that, if we treat the $X_i$s as random, the correct approximate variance is
+
+$$\frac{1}{n} \mathbb{E}[p_i(1 - p_i) X_i X_i^T]^{-1}$$
+(In practice, this doesn't really change anything, because with a single dataset our estimator of this variance is still going to be $(X^T W X)^{-1}$). 
+
+
+:::{.question}
+#### Question 9
+
+Repeat question 3, but this time sample new observations $X_i$ at each iteration of the simulation, as well as new responses $Y_i$. Verify that $\widehat{\beta}_1$ still follows an approximately normal distribution.
+
+Then, estimate $\frac{1}{n} \mathbb{E}[p_i(1 - p_i) X_i X_i^T]^{-1}$ (take many samples $X_i$ and average over them). Compare $\frac{1}{n} \mathbb{E}[p_i(1 - p_i) X_i X_i^T]^{-1}$ to the variance of $\widehat{\beta}_1$: is the theoretical variance close to the observed variance? What role does the sample size $n$ play?
+:::

@@ -1,0 +1,196 @@
+---
+title: "Class Activity Solutions"
+format: 
+  html:
+    embed-resources: true
+editor: source
+author: "Ciaran Evans"
+---
+
+```{r}
+set.seed(11)
+
+n <- 100
+beta <- c(-1, 1)
+x <- rnorm(n)
+X <- cbind(1, x)
+p <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+
+y <- rbinom(n, 1, p)
+  
+m1 <- glm(y ~ x, family = binomial)
+summary(m1)$coefficients
+```
+
+1. 
+
+```{r}
+vcov(m1)
+
+phat <- c(exp(X %*% coef(m1))/(1 + exp(X %*% coef(m1))))
+solve(t(X) %*% diag(phat*(1-phat)) %*% X)
+```
+
+2.
+
+```{r}
+solve(t(X) %*% diag(phat*(1-phat)) %*% X)[2,2]
+```
+
+3.
+
+```{r}
+nsim <- 5000
+slope_estimates <- rep(NA, nsim)
+for(i in 1:nsim){
+  y <- rbinom(n, 1, p)
+  
+  m1 <- glm(y ~ x, family = binomial)
+  slope_estimates[i] <- m1$coefficients[2]
+}
+```
+
+4.
+
+```{r}
+qqnorm(slope_estimates)
+qqline(slope_estimates)
+```
+
+5. 
+
+```{r}
+mean(slope_estimates)
+```
+
+Yes, this is pretty close to 1.
+
+6.
+
+```{r}
+var(slope_estimates)
+
+solve(t(X) %*% diag(p*(1-p)) %*% X)[2,2]
+```
+
+The variance is a little higher than $[(X^T W X)^{-1}]_{2,2}$; this is because the distribution of $\widehat{\beta}_1$ is slightly right-skewed, rather than normal (see the QQ plot above).
+
+7.
+
+```{r}
+n <- 50
+x <- rnorm(n)
+X <- cbind(1, x)
+p <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+
+slope_estimates <- rep(NA, nsim)
+for(i in 1:nsim){
+  y <- rbinom(n, 1, p)
+  
+  m1 <- glm(y ~ x, family = binomial)
+  slope_estimates[i] <- m1$coefficients[2]
+}
+
+qqnorm(slope_estimates)
+qqline(slope_estimates)
+
+var(slope_estimates)
+solve(t(X) %*% diag(p*(1-p)) %*% X)[2,2]
+```
+
+```{r}
+n <- 500
+x <- rnorm(n)
+X <- cbind(1, x)
+p <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+
+slope_estimates <- rep(NA, nsim)
+for(i in 1:nsim){
+  y <- rbinom(n, 1, p)
+  
+  m1 <- glm(y ~ x, family = binomial)
+  slope_estimates[i] <- m1$coefficients[2]
+}
+
+qqnorm(slope_estimates)
+qqline(slope_estimates)
+
+var(slope_estimates)
+solve(t(X) %*% diag(p*(1-p)) %*% X)[2,2]
+```
+
+The normal approximation improves as $n$ increases.
+
+8.
+
+```{r}
+nsim <- 5000
+n <- 100
+beta <- c(-1, 0, 0)
+  
+test_stats <- rep(NA, nsim)
+for(i in 1:nsim){
+  x1 <- rnorm(n)
+  x2 <- rnorm(n)
+  X <- cbind(1, x1, x2)
+  p <- exp(X %*% beta)/(1 + exp(X %*% beta))
+  y <- rbinom(n, 1, p)
+  
+  
+  m1 <- glm(y ~ x1 + x2, family = binomial)
+  test_stats[i] <- m1$null.deviance - m1$deviance
+}
+
+qqplot(rchisq(nsim, 2), test_stats)
+abline(a=0, b=1)
+```
+
+
+
+9. 
+
+```{r}
+n <- 100
+beta <- c(-1, 1)
+slope_estimates <- rep(NA, nsim)
+for(i in 1:nsim){
+  x <- rnorm(n)
+  X <- cbind(1, x)
+  p <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+
+  y <- rbinom(n, 1, p)
+  
+  m1 <- glm(y ~ x, family = binomial)
+  slope_estimates[i] <- m1$coefficients[2]
+}
+
+qqnorm(slope_estimates)
+qqline(slope_estimates)
+```
+
+```{r}
+var(slope_estimates)
+
+m <- 100000
+beta <- c(-1, 1)
+x <- rnorm(m)
+X <- cbind(1, x)
+p <- c(exp(X %*% beta)/(1 + exp(X %*% beta)))
+
+V <- matrix(c(mean(p*(1-p)), mean(p*(1-p)*x), 
+              mean(p*(1-p)*x), mean(p*(1-p)*x^2)),
+            nrow = 2)
+(solve(V)/n)[2,2]
+```
+
+The observed variance is a bit higher than the approximate theoretical variance. The theoretical variance gets closer to the true variance as $n$ increases.
+
+
+
+
+
+
+
+
+
+

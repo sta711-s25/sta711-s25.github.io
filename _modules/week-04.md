@@ -11,4 +11,8 @@ February 5
   : [Slides](https://sta711-s25.github.io/slides/lecture_8.pdf)
 
 February 7
-: Fisher information and Fisher scoring
+: Preview to inference with logistic regression
+  : [Slides](https://sta711-s25.github.io/slides/lecture_9.pdf), [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_9.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_9_solutions.html)
+  
+: **Homework 4 released**{: .label .label-yellow }
+  : [HW 4](https://sta711-s25.github.io/homework/HW4.html)
