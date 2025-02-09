@@ -1,0 +1,72 @@
+---
+title: "Lecture 10: Probability inequalities"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Last time
+
+* Wald tests for single coefficients: 
+
+$$Z = \dfrac{\widehat{\beta}_j - 0}{\widehat{SE}(\widehat{\beta}_j)} \hspace{1cm} \text{under } H_0, \ Z \approx N(0, 1)$$
+
+* Tests for nested models:
+
+$$G = 2( \log L_{\text{full}} - \log L_{\text{reduced}}) \hspace{1cm} \text{under } H_0, \ G \approx \chi^2_q$$
+
+## What we need
+
+We need to show that
+
+$$\widehat{\beta} \approx N(\beta, \mathcal{I}^{-1}(\beta))$$
+
+This requires:
+
+* a notion of convergence of random variables
+* asymptotic results about MLEs
+* hypothesis testing fundamentals
+
+Roadmap:
+
+1. Preliminary machinery -- probability inequalities, types of convergence, theorems about convergence
+2. Properties of MLEs -- consistency and asymptotic normality
+3. Hypothesis testing theory -- types of hypotheses, types of error, and types of hypothesis test (Neyman-Pearson, Wald, Likelihood ratio)
+
+## Markov's inequality
+
+**Theorem:** Let $Y$ be a non-negative random variable, and suppose that $\mathbb{E}[Y]$ exists. Then for any $t > 0$, 
+
+$$P(Y \geq t) \leq \frac{\mathbb{E}[Y]}{t}$$
+
+\vspace{5cm}
+
+## Chebyshev's inequality
+
+**Theorem:** Let $Y$ be a random variable, and let $\mu = \mathbb{E}[Y]$ and $\sigma^2 = Var(Y)$. Then
+
+$$P(|Y - \mu| \geq t) \leq \frac{\sigma^2}{t^2}$$
+
+With your neighbor, apply Markov's inequality to prove Chebyshev's inequality.
+
+\vspace{5cm}
+
+## Cauchy-Schwarz inequality
+
+**Theorem:** For any two random variables $X$ and $Y$,
+$$|\mathbb{E}[XY]| \leq \mathbb{E}|XY| \leq (\mathbb{E}[X^2])^{1/2}(\mathbb{E}[Y^2])^{1/2}$$
+
+**Example:** The *correlation* between $X$ and $Y$ is defined by
+
+$$\rho(X, Y) = \dfrac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}$$
+
+Using the Cauchy-Schwarz inequality, show that $-1 \leq \rho(X, Y) \leq 1$.
+
+\vspace{4cm}
+
+## Jensen's inequality
+
+**Theorem:** For any random variable $Y$, if $g$ is a convex function, then
+
+$$\mathbb{E}[g(Y)] \geq g(\mathbb{E}[Y])$$
+
+\vspace{6cm}
