@@ -63,8 +63,10 @@ Keep in mind that debugging software issues can take time, so make sure to start
 
 **Office hours:** (Manchester 329)
 
-Wednesday 2--3pm
-Thursday 9:30 -- 10:30am
+* Monday 1--2pm
+* Wednesday 2--3pm
+* Thursday 9:30 -- 10:30am
+* Thursday 1--2pm
 
 ## Course policies
 
