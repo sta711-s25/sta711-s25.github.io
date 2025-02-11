@@ -1,0 +1,73 @@
+---
+title: "Lecture 11: Convergence in probability"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Convergence in probability
+
+**Definition:** A sequence of random variables $X_1, X_2,...$ *converges in probability* to a random variable $X$ if, for every $\varepsilon > 0$,
+$$\lim \limits_{n \to \infty} P(|X_n - X| \geq \varepsilon) = 0$$
+We write $X_n \overset{p}{\to} X$.
+
+\vspace{4cm}
+
+## Example
+
+Let $U \sim Uniform(0, 1)$, and let $X_n = \sqrt{n} \ \mathbb{I} \{U \leq 1/n \}$.
+
+Then $X_n \overset{p}{\to} 0$.
+
+\vspace{5cm}
+
+
+## Weak Law of Large Numbers (WLLN)
+
+**Theorem:** Let $X_1, X_2, ...$ be iid random variables with $\mathbb{E}[X_i] = \mu$ and $Var(X_i) = \sigma^2 < \infty$. Then
+$$\overline{X}_n \overset{p}{\to} \mu$$
+
+\vspace{5cm}
+
+## Activity Part I
+
+Conduct a simulation to see the WLLN in action:
+
+[https://sta711-s25.github.io/class_activities/ca_lecture_11.html](https://sta711-s25.github.io/class_activities/ca_lecture_11.html)
+
+## Activity Part I
+
+```{r, echo=F, fig.width=6, fig.height=4}
+set.seed(23)
+
+ns <- c(10, 20, 50, 100, 200, 500)
+res <- rep(NA, length(ns))
+nsim <- 1000
+
+for(i in 1:length(ns)){
+  n <- ns[i]
+  means <- rep(NA, nsim)
+
+  for(j in 1:nsim){
+    x <- runif(n)
+    means[j] <- mean(x)
+  }
+  
+  res[i] <- mean(abs(means - 0.5) > 0.03)
+}
+
+plot(ns, res, xlab = "Sample size (n)", ylab = "P(|Xbar - 0.5| > 0.03)",
+     pch = 16)
+```
+
+
+## Another example
+
+Suppose that $X_1, X_2, ... \overset{iid}{\sim} Uniform(0, 1)$, and let $X_{(n)} = \max\{X_1,...,X_n\}$. Then $X_{(n)} \overset{p}{\to} 1$.
+
+\vspace{6cm}
+
+## Activity Part II
+
+Use a simulation to verify the Uniform example from the previous slide:
+
+[https://sta711-s25.github.io/class_activities/ca_lecture_11.html](https://sta711-s25.github.io/class_activities/ca_lecture_11.html)

@@ -1,0 +1,60 @@
+---
+title: "Class activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Convergence in probability
+
+**Convergence in probability:** Let $X_1, X_2, ...$ be a sequence of random variables. We say that $X_n \overset{p}{\to} X$ if for all $\varepsilon > 0$,
+
+$$\lim \limits_{n \to \infty} P(|X_n - X| \geq \varepsilon) = 0$$
+
+
+## Part I: The Weak Law of Large Numbers (WLLN)
+
+There are multiple versions of the WLLN. Here is the version we stated in class:
+
+**WLLN:** Let $X_1, X_2,...$ be iid with $\mu = \mathbb{E}[X_i]$ and $Var(X_i) < \infty$. Let $\bar{X}_n = \frac{1}{n} \sum \limits_{i=1}^n X_i$. Then $\bar{X}_n \overset{p}{\to} \mu$.
+
+In this activity we will simulate data to see the WLLN in action. The code below generates 1000 samples of size $n = 20$ from a $Uniform(0, 1)$ distribution, and calculates the sample mean for each sample:
+
+```{r, eval=F}
+n <- 20
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(j in 1:nsim){
+  x <- runif(n)
+  means[j] <- mean(x)
+}
+```
+
+:::{.question}
+#### Question 1
+
+Let $\varepsilon = 0.03$. What fraction of the time do the sample means fall within $\varepsilon$ of the true mean (here $\mu = 0.5$)? That is, what is the empirical estimate of $P(|\bar{X}_n - \mu| \geq 0.03)$?
+:::
+
+:::{.question}
+#### Question 2
+
+Repeat Question 1 with different values of $n$, and plot the probability as $n$ increases. Verify that the probability approaches 0.
+:::
+
+
+## Part II: another example
+
+
+Suppose that $X_1, X_2,... \overset{iid}{\sim} Uniform(0, 1)$. Let $X_{(n)} = \max\{X_1,...,X_n\}$. Then $X_{(n)} \overset{p}{\to} 1$. 
+
+:::{.question}
+#### Question 3
+
+Conduct a simulation to support this claim.
+:::
+
+
