@@ -1,0 +1,102 @@
+---
+title: "Class Activity Solutions"
+format: 
+  html:
+    embed-resources: true
+editor: source
+author: "Ciaran Evans"
+---
+
+1.
+
+```{r}
+n <- 2
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rpois(n, 1)
+  means[i] <- mean(x)
+}
+
+cdf_pts <- seq(-4, 4, 0.01)
+plot(cdf_pts, ecdf(sqrt(n) * (means - 1) / sqrt(1))(cdf_pts), type="l", 
+     xlab = "x", ylab = "CDF")
+points(cdf_pts, pnorm(cdf_pts, mean=0, sd=1), type="l", col="red")
+```
+
+A normal distribution isn't a perfect approximation here; the distribution of $\overline{X}$ is discrete, and only tends to take a few different values. Nevertheless, the normal distribution does capture the general shape pretty well.
+
+2.
+
+```{r}
+n <- 5
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rpois(n, 1)
+  means[i] <- mean(x)
+}
+
+cdf_pts <- seq(-4, 4, 0.01)
+plot(cdf_pts, ecdf(sqrt(n) * (means - 1) / sqrt(1))(cdf_pts), type="l", 
+     xlab = "x", ylab = "CDF", main = "n = 5")
+points(cdf_pts, pnorm(cdf_pts, mean=0, sd=1), type="l", col="red")
+```
+
+```{r}
+n <- 10
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rpois(n, 1)
+  means[i] <- mean(x)
+}
+
+cdf_pts <- seq(-4, 4, 0.01)
+plot(cdf_pts, ecdf(sqrt(n) * (means - 1) / sqrt(1))(cdf_pts), type="l", 
+     xlab = "x", ylab = "CDF", main = "n = 10")
+points(cdf_pts, pnorm(cdf_pts, mean=0, sd=1), type="l", col="red")
+```
+
+
+```{r}
+n <- 30
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rpois(n, 1)
+  means[i] <- mean(x)
+}
+
+cdf_pts <- seq(-4, 4, 0.01)
+plot(cdf_pts, ecdf(sqrt(n) * (means - 1) / sqrt(1))(cdf_pts), type="l", 
+     xlab = "x", ylab = "CDF", main = "n = 30")
+points(cdf_pts, pnorm(cdf_pts, mean=0, sd=1), type="l", col="red")
+```
+
+As $n$ increases, the normal distribution becomes a better approximation for the distribution of $\overline{X}$.
+
+3. Here is an $Exponential(1)$ distribution; we can see the normal approximation still performs well:
+
+```{r}
+n <- 30
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rexp(n, 1)
+  means[i] <- mean(x)
+}
+
+cdf_pts <- seq(-4, 4, 0.01)
+plot(cdf_pts, ecdf(sqrt(n) * (means - 1) / sqrt(1))(cdf_pts), type="l", 
+     xlab = "x", ylab = "CDF", main = "n = 30")
+points(cdf_pts, pnorm(cdf_pts, mean=0, sd=1), type="l", col="red")
+```
+
+
+

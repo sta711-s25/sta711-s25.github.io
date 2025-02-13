@@ -1,0 +1,62 @@
+---
+title: "Class activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Convergence in distribution
+
+**Convergence in distribution:** Let $X_1, X_2, ...$ be a sequence of random variables. We say that $X_n \overset{d}{\to} X$ if 
+
+$$\lim \limits_{n \to \infty} F_{X_n}(t) = F_{X}(t)$$
+
+for all points $t$ where $F_X$ is continuous; here $F_{X_n}$ is the cdf of $X_n$, and $F_X$ the cdf of $X$.
+
+## The Central Limit Theorem (CLT)
+
+Here is the version of the CLT that we stated in class:
+
+**CLT:** Let $X_1, X_2,...$ be iid random variables, whose mgf exists in a neighborhood of 0. Let $\mu = \mathbb{E}[X_i]$ and $\sigma^2 = Var(X_i) < \infty$. Then 
+
+$$\frac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma} \overset{d}{\to} Z$$
+
+where $Z \sim N(0, 1)$.
+
+The code below simulates 1000 samples of size $n = 2$ from a $Poisson(1)$ distribution, and calculates the sample mean for each sample. It then plots the CDF of the sample means (in black), and the CDF of a standard normal distribution (in red).
+
+```{r, eval=F}
+n <- 2
+nsim <- 1000
+means <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rpois(n, 1)
+  means[i] <- mean(x)
+}
+
+cdf_pts <- seq(-4, 4, 0.01)
+plot(cdf_pts, ecdf(sqrt(n) * (means - 1) / sqrt(1))(cdf_pts), type="l", 
+     xlab = "x", ylab = "CDF")
+points(cdf_pts, pnorm(cdf_pts, mean=0, sd=1), type="l", col="red")
+```
+
+:::{.question}
+#### Question 1
+
+Run the code above; is the $N(0, 1)$ distribution close to the distribution of $\bar{X}$?
+:::
+
+:::{.question}
+#### Question 2
+
+Repeat Question 1 with different values of $n$, and verify that the $N(0, 1)$ distribution is a better approximation as $n$ increases.
+:::
+
+:::{.question}
+#### Question 3
+
+Repeat Question 2 with different distributions for $X_i$, and verify that the distribution of $\bar{X}$ is still approximately normal.
+:::

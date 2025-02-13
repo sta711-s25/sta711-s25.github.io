@@ -16,5 +16,9 @@ February 12
 
 February 14
 : Convergence of random variables
+  : [Slides](https://sta711-s25.github.io/slides/lecture_12.pdf), [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_12.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_12_solutions.html)
 
 : Casella and Berger 5.5
+
+: **Homework 5 released**{: .label .label-yellow }
+  : [HW 5](https://sta711-s25.github.io/homework/HW5.pdf)

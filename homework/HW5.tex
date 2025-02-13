@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+STA 711 Homework 5\\
+\normalsize
+\vspace{5mm}
+\end{center}
+
+\noindent \textbf{Due:} Friday, February 21, 10:00am on Canvas.\\ 
+
+\noindent \textbf{Instructions:} Submit your work as a single PDF. You may choose to either hand-write your work and submit a PDF scan, or type your work using LaTeX and submit the resulting PDF. See the course website for a \href{https://sta711-s25.github.io/homework/hw_template.tex}{homework template file} and \href{https://sta711-s25.github.io/homework/latex_instructions/}{instructions} on getting started with LaTeX and Overleaf.
+
+\section*{Convergence of random variables}
+
+In this section, you will practice proving limits for sequences of random variables. As a reminder, here are some of the common techniques for proving convergence:
+
+\begin{itemize}
+\item For convergence in probability: if you have a sequence of means, try to apply the WLLN
+\item For convergence in probability: if you can easily calculate a mean or variance, try bounding probabilities with Markov's or Chebyshev's inequality
+\item For convergence in probability: if calculating means or variances is hard, try calculating the probabilities directly for the convergence
+\item For convergence in distribution to a normal or $\chi^2$: check if the central limit theorem applies
+\item For convergence in distribution: if CLT is not the right strategy, try calculating the cdfs directly
+\end{itemize}
+
+\vspace{1cm}
+
+\begin{enumerate}
+\item For each of the following sequences $\{Y_n\}$, show that $Y_n \overset{p}{\to} 1$. Then write a simulation in R demonstrating the convergence.
+\begin{enumerate}
+\item $Y_n = 1 + n X_n$, where $X_n \sim Bernoulli(1/n)$
+
+\item $Y_n = \frac{1}{n} \sum \limits_{i=1}^n X_i^2$, where $X_i \overset{iid}{\sim} N(0, 1)$
+\end{enumerate}
+
+\item Suppose that $Y_1, Y_2,... \overset{iid}{\sim} Beta(1, \beta)$. Find a value of $\nu$ such that $n^{\nu}(1 - Y_{(n)})$ converges in distribution. Then write a simulation in R demonstrating the convergence. (\textit{Hint:} if you are struggling to find $\nu$, starting with simulations may be helpful)
+
+%\item Suppose that $Y_1, Y_2,... \overset{iid}{\sim} Exponential(1)$. Find a sequence $a_n$ such that $Y_{(n)} - a_n$ converges in distribution.
+
+\item In this problem, we will prove part of the continuous mapping theorem. Let $\{Y_n\}$ be a sequence of real-valued random variables such that $Y_n \overset{p}{\to} Y$ for some random variable $Y$. Let $g$ be a continuous function; recall that $g$ is continuous if for all $\varepsilon > 0$, there exists some $\delta > 0$ such that $|g(x) - g(y)| < \varepsilon$ whenever $|x - y| < \delta$. Prove that $g(Y_n) \overset{p}{\to} g(Y)$.
+
+\item Consider the simple linear regression model
+$$Y_i = \beta_0 + \beta_1 X_i + \varepsilon_i$$
+where the $X_i$ are known constants, and the $\varepsilon_i$ are iid with $\mathbb{E}[\varepsilon_i] = 0$ and $Var(\varepsilon_i) = \sigma^2$. It can be shown that the least squares estimate of $\beta_1$ is
+$$\widehat{\beta}_1 = \beta_1 + \dfrac{\sum \limits_{i=1}^n (X_i - \overline{X}_n) \varepsilon_i}{\sum \limits_{i=1}^n (X_i - \overline{X}_n)^2}.$$
+Show that if $\sum \limits_{i=1}^n (X_i - \overline{X}_n)^2 \to \infty$ as $n \to \infty$, then $\widehat{\beta}_1 \overset{p}{\to} \beta$. (Note: no distribution for $\varepsilon_i$ or $Y_i$ has been assumed, so $\widehat{\beta}_1$ cannot be treated as a maximum likelihood estimator).
+
+\end{enumerate}
+
+
+
+\end{document}
