@@ -1,0 +1,130 @@
+---
+title: "Lecture 14: Asymptotic properties of the MLE"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Recap: Convergence in probability
+
+**Definition:** A sequence of random variables $X_1, X_2,...$ *converges in probability* to a random variable $X$ if, for every $\varepsilon > 0$,
+$$\lim \limits_{n \to \infty} P(|X_n - X| \geq \varepsilon) = 0$$
+We write $X_n \overset{p}{\to} X$.
+
+## Convergence in distribution
+
+**Definition:** A sequence of random variables $X_1, X_2,...$ *converges in distribution* to a random variable $X$ if
+
+$$\lim \limits_{n \to \infty} F_{X_n}(x) = F_X(x)$$
+at all points where $F_X(x)$ is continuous. We write $X_n \overset{d}{\to} X$.
+
+## Convergence of the MLE
+
+Suppose that we observe $Y_1, Y_2, Y_3,...$ iid from a distribution with probability function $f(y | \theta)$, where $\theta \in \mathbb{R}^d$ is the parameter(s) we are trying to estimate. Let
+\vspace{-0.3cm}
+$$\ell_n(\theta) = \sum \limits_{i=1}^n \log f(Y_i | \theta)$$
+\vspace{-0.3cm}
+$$\widehat{\theta}_n = \text{argmax}_\theta \ \ell_n(\theta)$$
+\vspace{-0.5cm}
+
+$$\mathcal{I}_1(\theta) = - \mathbb{E} \left[ \dfrac{\partial^2}{\partial \theta^2} \log f(Y_i | \theta) \right]$$
+
+**Theorem:** Under certain regularity conditions (to be discussed later),
+
+(a) $\widehat{\theta}_n \overset{p}{\to} \theta$ 
+(b) $\sqrt{n}(\widehat{\theta}_n - \theta) \overset{d}{\to} N(0, \mathcal{I}_1^{-1}(\theta))$
+
+## Asymptotic normality: proof approach
+
+Let $\ell'_n(\theta) = \frac{\partial}{\partial \theta} \ell_n(\theta)$, $\ell''_n(\theta) = \frac{\partial^2}{\partial \theta^2} \ell_n(\theta)$
+
+Begin with a Taylor expansion of $\ell'_n$ around $\theta$:
+
+$$\ell'_n(\widehat{\theta}_n) = \hspace{4cm}$$
+
+\vspace{5cm}
+
+## Asymptotic normality: proof approach
+
+Using the Taylor expansion, 
+
+$$\sqrt{n}(\widehat{\theta}_n - \theta) \approx \dfrac{\frac{1}{\sqrt{n}} \ell'_n(\theta)}{ - \frac{1}{n} \ell''_n(\theta)}$$
+
+Next, look at limits for the numerator and denominator:
+
+* $\frac{1}{\sqrt{n}} \ell'_n(\theta)$
+
+\bigskip
+
+* $- \frac{1}{n} \ell''_n(\theta)$
+
+## Asymptotic normality: the numerator
+
+Want to show: $\frac{1}{\sqrt{n}} \ell'_n(\theta) \overset{d}{\to} N(0, \mathcal{I}_1(\theta))$
+
+* CLT: for iid $X_1, X_2,...$, under mild conditions $\sqrt{n}\left( \frac{1}{n} \sum \limits_{i=1}^n X_i - \mathbb{E}[X_i] \right) \overset{d}{\to} N(0, Var(X_i))$
+* $\ell'_n(\theta) = \sum \limits_{i=1}^n \frac{\partial}{\partial \theta} \log f(Y_i | \theta)$
+
+Applying CLT to $\ell'_n(\theta)$:
+
+\vspace{5cm}
+
+## Asymptotic normality: the numerator
+
+Want to show: $\frac{1}{\sqrt{n}} \ell'_n(\theta) \overset{d}{\to} N(0, \mathcal{I}_1(\theta))$
+
+CLT gives $\sqrt{n}\left( \frac{1}{n} \ell'_n(\theta) - \mathbb{E}\left[ \frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right] \right) \overset{d}{\to} N \left(0, Var \left(\frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right) \right)$
+
+Need to show:
+
+* $\mathbb{E}\left[ \frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right] =$
+* $Var \left(\frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right) =$
+
+## The expected score
+
+**Claim:** Under regularity conditions,
+
+$$\mathbb{E}\left[ \frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right] = 0$$
+
+\vspace{5cm}
+
+
+## Fisher information
+
+**Claim:** Under regularity conditions,
+
+$$Var \left(\frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right) = -\mathbb{E} \left[ \frac{\partial^2}{\partial \theta^2} \log f(Y_i | \theta)  \right]$$
+
+\vspace{5cm}
+
+## Numerator: putting everything together
+
+Want to show: $\frac{1}{\sqrt{n}} \ell'_n(\theta) \overset{d}{\to} N(0, \mathcal{I}_1(\theta))$
+
+
+* CLT gives 
+$$\sqrt{n}\left( \frac{1}{n} \ell'_n(\theta) - \mathbb{E}\left[ \frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right] \right) \overset{d}{\to} N \left(0, Var \left(\frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right) \right)$$
+* Under regularity conditions, 
+$$\mathbb{E}\left[ \frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right] = 0$$
+* Under regularity conditions, 
+$$Var \left(\frac{\partial}{\partial \theta} \log f(Y_i | \theta) \right) = -\mathbb{E} \left[ \frac{\partial^2}{\partial \theta^2} \log f(Y_i | \theta)  \right]$$
+
+\vspace{5cm}
+
+## Now the denominator
+
+Want to show: $- \frac{1}{n} \ell''_n(\theta) \overset{p}{\to} \mathcal{I}_1(\theta)$
+
+**Question:** What big theorem do we have for convergence in probability?
+
+\vspace{5cm}
+
+## The denominator: WLLN
+
+Want to show: $- \frac{1}{n} \ell''_n(\theta) \overset{p}{\to} \mathcal{I}_1(\theta)$
+
+* WLLN: For iid $X_1, X_2,...$, under mild conditions $\frac{1}{n} \sum \limits_{i=1}^n X_i \overset{p}{\to} \mathbb{E}[X_i]$
+* $- \frac{1}{n} \ell''_n(\theta) = \frac{1}{n} \sum \limits_{i=1}^n -\frac{\partial^2}{\partial \theta^2} \log f(Y_i | \theta)$
+
+Applying WLLN to $- \frac{1}{n} \ell''_n(\theta)$:
+
+\vspace{5cm}
