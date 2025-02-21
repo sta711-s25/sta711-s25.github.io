@@ -4,6 +4,18 @@ author: "Ciaran Evans"
 output: beamer_presentation
 ---
 
+## Logistics
+
+* HW 5 due Monday, February 24 
+
+\bigskip
+
+* Exam 1 on Canvas; due Monday, March 3
+
+\bigskip
+
+* No other assignments due before spring break
+
 ## Recap: Convergence in probability
 
 **Definition:** A sequence of random variables $X_1, X_2,...$ *converges in probability* to a random variable $X$ if, for every $\varepsilon > 0$,
