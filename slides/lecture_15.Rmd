@@ -1,0 +1,134 @@
+---
+title: "Lecture 15: Asymptotic normality and beginning testing"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Convergence of the MLE
+
+Suppose that we observe $Y_1, Y_2, Y_3,...$ iid from a distribution with probability function $f(y | \theta)$, where $\theta \in \mathbb{R}^d$ is the parameter(s) we are trying to estimate. Let
+\vspace{-0.3cm}
+$$\ell_n(\theta) = \sum \limits_{i=1}^n \log f(Y_i | \theta)$$
+\vspace{-0.3cm}
+$$\widehat{\theta}_n = \text{argmax}_\theta \ \ell_n(\theta)$$
+\vspace{-0.5cm}
+
+$$\mathcal{I}_1(\theta) = - \mathbb{E} \left[ \dfrac{\partial^2}{\partial \theta^2} \log f(Y_i | \theta) \right]$$
+
+**Theorem:** Under certain regularity conditions,
+
+(a) $\widehat{\theta}_n \overset{p}{\to} \theta$ 
+(b) $\sqrt{n}(\widehat{\theta}_n - \theta) \overset{d}{\to} N(0, \mathcal{I}_1^{-1}(\theta))$
+
+## Proof of asymptotic normality
+
+## Slutsky's theorem
+
+Let $\{X_n\}, \{Y_n\}$ be sequences of random variables, and suppose that $X_n \overset{d}{\to} X$ and $Y_n \overset{p}{\to} c$ for some constant $c$. Then:
+
+* $X_n + Y_n \to$
+
+\bigskip
+
+* $X_n Y_n \to$
+
+\bigskip
+
+* $\dfrac{X_n}{Y_n} \to$
+
+\vspace{4cm}
+
+## Some sufficient regularity conditions
+
+## A counterexample
+
+Suppose $Y_1, Y_2,... \overset{iid}{\sim} Uniform(0, \theta)$.
+
+
+\vspace{5cm}
+
+## A counterexample
+
+Suppose $Y_1, Y_2, ... \overset{iid}{\sim} Bernoulli(p)$.
+
+* $\widehat{p} =$
+
+\bigskip
+
+* If $p = 0$ or $p = 1$, what is $\sqrt{n}(\widehat{p} - p)$?
+
+\vspace{5cm}
+
+## Where we are going
+
+So far:
+
+* How can we estimate parameters/ fit a model?
+
+* Asymptotic properties of MLEs
+
+\bigskip
+
+Next:
+
+* How can we use our estimates for inference?
+
+\bigskip
+
+Future:
+
+* General hypothesis testing framework
+* Other methods for testing hypotheses
+* Confidence intervals
+
+## Hypothesis tests for a population mean
+
+Let $X_1, X_2,...$ be an iid sample from a population with mean $\mu$ and variance $\sigma^2$. We want to test
+
+$$H_0: \mu = \mu_0 \hspace{1cm} H_A: \mu \neq \mu_0$$
+
+**Test statistic:**
+
+\vspace{5cm}
+
+## Hypothesis tests for a population mean
+
+Let $X_1, X_2,...$ be an iid sample from a population with mean $\mu$ and variance $\sigma^2$. We want to test
+
+$$H_0: \mu = \mu_0 \hspace{1cm} H_A: \mu \neq \mu_0$$
+
+**Test statistic:** $Z_n = \dfrac{\overline{X}_n -\mu_0}{\sigma/\sqrt{n}}$
+
+What if $\sigma$ is unknown?
+
+\vspace{5cm}
+
+
+## Hypothesis tests for a population mean
+
+Let $X_1, X_2,...$ be an iid sample from a population with mean $\mu$ and variance $\sigma^2$. We want to test
+
+$$H_0: \mu = \mu_0 \hspace{1cm} H_A: \mu \neq \mu_0$$
+
+**Test statistic:** $Z_n = \dfrac{\overline{X}_n -\mu_0}{\sigma/\sqrt{n}}$
+
+**Rejecting:** Should we reject $H_0$ when $Z_n$ is close to 0, or when $Z_n$ is far away from 0?
+
+\vspace{5cm}
+
+
+## Hypothesis tests for a population mean
+
+Let $X_1, X_2,...$ be an iid sample from a population with mean $\mu$ and variance $\sigma^2$. We want to test
+
+$$H_0: \mu = \mu_0 \hspace{1cm} H_A: \mu \neq \mu_0$$
+
+**Test statistic:** $Z_n = \dfrac{\overline{X}_n -\mu_0}{\sigma/\sqrt{n}}$
+
+**Rejecting:** Reject $H_0$ when $|Z_n| > z_{\alpha/2}$
+
+**p-value:** How do we calculate a p-value?
+
+\vspace{5cm}
+
+## Wald test for one parameter
