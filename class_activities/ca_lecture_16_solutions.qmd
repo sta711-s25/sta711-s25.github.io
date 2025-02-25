@@ -1,0 +1,40 @@
+---
+title: "Class Activity Solutions"
+format: 
+  html:
+    embed-resources: true
+editor: source
+author: "Ciaran Evans"
+---
+
+1.
+
+```{r}
+titanic <- read.csv("https://sta711-s25.github.io/homework/Titanic.csv")
+
+m1 <- glm(Survived ~ Sex + Age + as.factor(Pclass), family = binomial,
+          data = titanic)
+```
+
+
+2.
+
+```{r}
+c_mat <- matrix(c(0, 0, 0, 1, 0,
+                  0, 0, 0, 0, 1),
+                nrow = 2,
+                byrow = T)
+
+test_stat <- t(c_mat %*% m1$coefficients) %*% solve(c_mat %*% vcov(m1) %*% t(c_mat)) %*%
+  (c_mat %*% m1$coefficients)
+
+pchisq(test_stat, 2, lower.tail=F)
+```
+
+
+
+
+
+
+
+

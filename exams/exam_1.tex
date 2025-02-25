@@ -1,0 +1,143 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+STA 711 Exam 1\\
+\normalsize
+\vspace{5mm}
+\end{center}
+
+\noindent \textbf{Due:} Monday, March 3, 10:00pm on Canvas.\\ 
+
+\noindent \textbf{Instructions:} Submit your work as a single PDF. For this assignment, you may include written work by scanning it and incorporating it into the PDF. Include all R code needed to reproduce your results in your submission.\\
+
+\noindent \textbf{Mastery:} To master this exam, you will need to master at least 5 of the 7 questions. (You may, of course, attempt all 7).\\
+
+\noindent \textbf{Rules:} This is an open-book, open-notes exam. You may:
+\begin{itemize}
+\item Use any resources from the course (the textbook, the course website, class notes, previous assignments, etc.)
+\item Email me, or come to office hours, with specific questions (I may be somewhat less helpful than for regular assignments)
+\item Use one or two days from your bank of extension days, if you need more time on the exam
+\end{itemize}
+You may \textit{not}:
+\begin{itemize}
+\item Use the internet to look up any questions on the exam
+\item Use any resources outside of the course (other textbooks, any textbook solution manuals, notes from other courses or universities, etc.)
+\item Use WolframAlpha or any generative AI to help solve the problems
+\item Discuss the exam with anyone else
+\end{itemize}
+
+\newpage
+
+\section*{Maximum likelihood questions}
+
+\begin{enumerate}
+\item Let $Y_1,...,Y_n \overset{iid}{\sim} Uniform(a, b)$, where $a$ and $b$ are unknown and $a < b$. Recall that a uniform distribution has pdf
+\begin{align*}
+f(y|a,b) = \begin{cases}
+\frac{1}{b - a} & a \leq y \leq b \\
+0 & \text{else}
+\end{cases}
+\end{align*}
+\begin{enumerate}
+\item Find the maximum likelihood estimators $\widehat{a}$ and $\widehat{b}$.
+\item Let $\tau = \mathbb{E}[Y_1]$. Find the MLE $\widehat{\tau}$.
+\end{enumerate}
+
+\bigskip
+
+\item Let $Y_1,...,Y_n$ be iid from a distribution with pdf
+$$f(y|\lambda) = \frac{2}{\lambda \sqrt{2 \pi}} e^y \exp \left\lbrace \frac{-(e^y - 1)^2}{2\lambda^2} \right\rbrace,$$
+where $y > 0$ and $\lambda > 0$. Find the MLE of $\lambda$.
+
+\bigskip
+
+\item Let $Y_1,...,Y_n$ be an iid sample from a continuous distribution with pdf 
+$$f(y|\theta) = \frac{1}{2} \exp\{-|y - \theta|\},$$
+where $-\infty < y < \infty$ and $-\infty < \theta < \infty$. Find the maximum likelihood estimator of $\theta$. You are not required to check a second derivative for this problem. 
+
+\bigskip
+
+\item Let $Y_1,...,Y_n$ be iid from a distribution with pdf
+$$f(y | \theta) = a^{\theta} \theta y^{-\theta - 1}$$
+where $\theta > 0$, $y \geq a$, and $a$ is a known constant. Find the MLE of $\theta$.
+
+\bigskip
+
+\item Let $Y_1,...,Y_n$ be iid from a distribution with pdf
+$$f(y | \theta_1, \theta_2) = \begin{cases} \dfrac{1}{\theta_1 + \theta_2} \exp\left\lbrace \dfrac{-y}{\theta_1}\right\rbrace & y > 0 \\ \dfrac{1}{\theta_1 + \theta_2} \exp\left\lbrace \dfrac{y}{\theta_2}\right\rbrace & y \leq 0 \end{cases}$$
+with $\theta_1, \theta_2 > 0$. Show that the maximum likelihood estimators of $\widehat{\theta}_1$ and $\widehat{\theta}_2$ are given by
+$$\widehat{\theta}_1= T_1 + \sqrt{T_1 T_2} \hspace{1cm} \widehat{\theta}_2 = T_2 + \sqrt{T_1 T_2}$$
+where
+$$T_1 = \frac{1}{n} \sum \limits_{i=1}^n Y_i \mathbbm{1}\{Y_i > 0\} \hspace{1cm} T_2 = -\frac{1}{n} \sum \limits_{i=1}^n Y_i \mathbbm{1}\{Y_i \leq 0\}.$$
+You are not required to check a second derivative for this problem.
+
+\end{enumerate}
+
+\newpage
+
+\section*{Exponential regression}
+
+The exponential distribution with parameter $\lambda$ has pdf
+
+$$f(y | \lambda) = \frac{1}{\lambda} \exp\left\lbrace - \frac{y}{\lambda} \right\rbrace, \hspace{1cm} y > 0.$$
+
+\begin{enumerate}
+\item[6.] 
+\begin{enumerate}
+\item Show that this exponential distribution is an example of an exponential dispersion model (EDM), by finding the canonical parameter $\theta$, the dispersion parameter $\phi$, and the cumulant function $\kappa(\theta)$.
+
+\item Suppose $Y \sim Exponential(\lambda)$ with the pdf above. Using properties of the cumulant function $\kappa$, calculate $\mathbb{E}[Y]$ and $Var(Y)$. (Your answer should use $\kappa$ to calculate these values; do not integrate the pdf or derive the mgf).
+
+\item Let $Y_i > 0$ be a continuous, positive response variable of interest, and let $X_i = (1, X_{i,1},...,X_{i,p})^T \in \mathbb{R}^{p+1}$ be a vector of covariates. Suppose we observe independent samples $(X_1, Y_1),...,(X_n, Y_n)$ from the following model:
+
+\begin{align*}
+Y_i &\sim Exponential(\lambda_i) \\
+-\frac{1}{\lambda_i} &= \beta^T X_i
+\end{align*}
+
+Write down the score function $U(\beta | X, Y)$ and the Hessian ${\bf H}(\beta | X, Y)$ in matrix form. Your answer should involve the $\lambda_i$ (i.e. do not leave the answer in terms of $\mu_i$, $\theta_i$, $Var(Y_i)$, etc.)
+\end{enumerate}
+
+\item[7.] Now we apply the model from Question 6 to real data. A factory is interested in the relationship between the amount of stress applied to a piece of steel, and the time it takes until that steel breaks. We use the following model:
+\begin{align*}
+time_i &\sim Exponential(\lambda_i) \\
+-\dfrac{1}{\lambda_i} &= \beta_0 + \beta_1 stress_i
+\end{align*}
+The raw data contains $n = 40$ observations $(stress_1, \ time_1),...,(stress_{40}, \ time_{40})$.\\
+
+\noindent You can load the data into R by
+\begin{verbatim}
+steel <- read.csv("https://sta711-s25.github.io/exams/steel.csv")
+\end{verbatim}
+
+Use Newton's method to calculate $\widehat{\beta} = (\widehat{\beta}_0, \widehat{\beta}_1)^T$. Begin at 
+
+$$\beta^{(0)} = \begin{pmatrix}
+- \dfrac{1}{\overline{Y}} \\ 0
+\end{pmatrix} = \begin{pmatrix}
+-15.18397 \\ 0
+\end{pmatrix}$$
+
+For the purpose of this question, stop when 
+$$\max \{ |\beta_0^{(r+1)} - \beta_0^{(r)}|, \ |\beta_1^{(r+1)} - \beta_1^{(r)}| \} < 0.0001$$
+
+\end{enumerate}
+
+\end{document}
