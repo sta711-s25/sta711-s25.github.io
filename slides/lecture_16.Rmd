@@ -67,6 +67,66 @@ coef(m1)
 vcov(m1)
 ```
 
+## Multivariate normal distribution
+
+**Definition:** Let $X = (X_1,...,X_k)^T$. We say that $X \sim N(\mu, \Sigma)$ if for any ${\bf a} \in \mathbb{R}^k$, ${\bf a}^T X$ follows a (univariate) normal distribution.
+
+* $\mu =$
+
+\vspace{2cm}
+
+* $\Sigma =$
+
+\vspace{2cm}
+
+## Multivariate normal distribution
+
+```{r, echo=F, message=F, warning=F, fig.align='center', fig.width=3.5, fig.height=3.5}
+library(MASS)
+library(patchwork)
+library(tidyverse)
+y <- mvrnorm(1000, mu=c(0, 0), Sigma = diag(2))
+
+p1 <- data.frame(x1 = y[,1], x2 = y[,2]) |>
+  ggplot(aes(x = x1, y = x2)) +
+  geom_point(alpha = 0.2, size=0.3) +
+  stat_ellipse(type="norm", level = 0.5) +
+  stat_ellipse(type="norm", level = 0.7) +
+  stat_ellipse(type="norm", level = 0.9) +
+  theme_classic()
+
+y <- mvrnorm(1000, mu=c(0, 0), Sigma = diag(c(1, 5)))
+
+p2 <- data.frame(x1 = y[,1], x2 = y[,2]) |>
+  ggplot(aes(x = x1, y = x2)) +
+  geom_point(alpha = 0.2, size=0.3) +
+  stat_ellipse(type="norm", level = 0.5) +
+  stat_ellipse(type="norm", level = 0.7) +
+  stat_ellipse(type="norm", level = 0.9) +
+  theme_classic() +
+  scale_x_continuous(limits = c(-6, 6)) +
+  scale_y_continuous(limits = c(-6, 6))
+
+y <- mvrnorm(1000, mu=c(0, 0), Sigma = matrix(c(1, 0.75, 0.75, 1), nrow=2))
+
+p3 <- data.frame(x1 = y[,1], x2 = y[,2]) |>
+  ggplot(aes(x = x1, y = x2)) +
+  geom_point(alpha = 0.2, size=0.3) +
+  stat_ellipse(type="norm", level = 0.5) +
+  stat_ellipse(type="norm", level = 0.7) +
+  stat_ellipse(type="norm", level = 0.9) +
+  theme_classic() +
+  scale_x_continuous(limits = c(-3, 3)) +
+  scale_y_continuous(limits = c(-3, 3))
+
+(p1 + p2)/(p3 + plot_spacer())
+
+#alpha_levels <- c(0.5, 0.9)
+#contour_data <- data.table::rbindlist(lapply(alpha_levels,ellipse,x=diag(2),
+#      scale=c(1,1),  ## needed for positional matching
+#      centre=c(0, 0)))
+```
+
 ## Wald tests for multiple parameters
 
 For the dengue example: $\widehat{\beta} = \begin{pmatrix} \widehat{\beta}_0 \\ \widehat{\beta}_1 \\ \widehat{\beta}_2 \end{pmatrix}$
@@ -87,6 +147,17 @@ C <- matrix(c(0, 1, 0,
 C
 C %*% coef(m1)
 ```
+
+## Wald tests for multiple parameters
+
+For the dengue example:
+
+```{r}
+C
+vcov(m1)
+C %*% vcov(m1) %*% t(C)
+```
+
 
 
 ## Wald tests for multiple parameters
