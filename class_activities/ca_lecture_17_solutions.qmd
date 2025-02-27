@@ -1,0 +1,130 @@
+---
+title: "Class Activity Solutions"
+format: 
+  html:
+    embed-resources: true
+editor: source
+author: "Ciaran Evans"
+---
+
+1.
+
+```{r}
+titanic <- read.csv("https://sta711-s25.github.io/homework/Titanic.csv")
+
+m1 <- glm(Survived ~ Sex + Age + as.factor(Pclass), family = binomial,
+          data = titanic)
+```
+
+
+2.
+
+```{r}
+c_mat <- matrix(c(0, 0, 0, 1, 0,
+                  0, 0, 0, 0, 1),
+                nrow = 2,
+                byrow = T)
+
+test_stat <- t(c_mat %*% m1$coefficients) %*% solve(c_mat %*% vcov(m1) %*% t(c_mat)) %*%
+  (c_mat %*% m1$coefficients)
+
+test_stat
+pchisq(test_stat, 2, lower.tail=F)
+```
+
+3--4.
+
+```{r}
+c_mat <- matrix(c(0, 0, 0, 1, -1),
+                nrow = 1,
+                byrow = T)
+
+test_stat <- t(c_mat %*% m1$coefficients) %*% solve(c_mat %*% vcov(m1) %*% t(c_mat)) %*%
+  (c_mat %*% m1$coefficients)
+
+test_stat
+pchisq(test_stat, 1, lower.tail=F)
+```
+
+5.
+
+```{r}
+set.seed(6)
+alpha <- 0.05
+n <- 20
+mu <- 0
+nsim <- 1000
+rejections <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rnorm(n, mu)
+  z <- sqrt(n)*(mean(x) - 0)/1
+
+  # check if reject
+  rejections[i] <- abs(z) > qnorm(alpha/2, lower.tail=F)
+}
+
+mean(rejections)
+```
+
+6.
+
+
+```{r}
+alpha <- 0.05
+n <- 20
+mu_values <- seq(-2, 2, 0.1)
+power <- rep(NA, length(mu_values))
+nsim <- 1000
+
+for(j in 1:length(mu_values)){
+  mu <- mu_values[j]
+
+  rejections <- rep(NA, nsim)
+  
+  for(i in 1:nsim){
+    x <- rnorm(n, mu)
+    z <- sqrt(n)*(mean(x) - 0)/1
+  
+    # check if reject
+    rejections[i] <- abs(z) > qnorm(alpha/2, lower.tail=F)
+  }
+  
+  power[j] <- mean(rejections)
+}
+
+plot(mu_values, power, type="l", xlab = "mu", ylab = "Power")
+```
+
+7.
+
+
+```{r}
+alpha <- 0.05
+mu <- 0.2
+sample_sizes <- c(5, 10, 15, 20, 30, 50, 75, 100, 200)
+power <- rep(NA, length(sample_sizes))
+nsim <- 1000
+
+for(j in 1:length(sample_sizes)){
+  n <- sample_sizes[j]
+
+  rejections <- rep(NA, nsim)
+  
+  for(i in 1:nsim){
+    x <- rnorm(n, mu)
+    z <- sqrt(n)*(mean(x) - 0)/1
+  
+    # check if reject
+    rejections[i] <- abs(z) > qnorm(alpha/2, lower.tail=F)
+  }
+  
+  power[j] <- mean(rejections)
+}
+
+plot(sample_sizes, power, type="l", xlab = "n", ylab = "Power")
+```
+
+
+
+

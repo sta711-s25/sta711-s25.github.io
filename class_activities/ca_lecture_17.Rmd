@@ -1,0 +1,142 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Hypothesis testing with the Titanic data
+
+In the first part of this class activity, we will perform hypothesis tests for a logistic regression model with the Titanic data. Let $Y_i$ denote whether passenger $i$ survived. We will use the model
+
+$$Y_i \sim Bernoulli(p_i)$$
+
+$$\log \left( \dfrac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 Sex_i + \beta_2 Age_i + \beta_3 SecondClass_i + \beta_4 ThirdClass_i$$
+
+The Titanic data can be imported into R with
+
+```{r}
+titanic <- read.csv("https://sta711-s25.github.io/homework/Titanic.csv")
+```
+
+## Wald tests with the logistic regression model
+
+Asymptotic normality of the MLE gives us that our estimated logistic regression coefficients are approximately normal:
+
+$$\widehat{\beta} \approx N(\beta, \ \mathcal{I}^{-1}(\beta))$$
+
+Suppose we wish to test the hypotheses
+
+$$H_0: {\bf C}\beta = \gamma_0 \hspace{1cm} H_A: {\bf C}\beta \neq \gamma_0$$
+
+where ${\bf C}$ is some matrix. The Wald test uses the test statistic
+
+$$W = ({\bf C} \widehat{\beta} - \gamma_0)^T({\bf C} \mathcal{I}^{-1}(\beta) {\bf C}^T)^{-1} ({\bf C} \widehat{\beta} - \gamma_0)$$
+Under $H_0$, we have that $W \approx \chi^2_q$, where $q$ is the length of ${\bf C}\beta$.
+
+
+## Questions: Wald test for multiple coefficients
+
+:::{.question}
+#### Question 1
+
+Fit the logistic regression model in R.
+:::
+
+:::{.question}
+#### Question 2
+
+Use a Wald test to test 
+
+$$H_0: \beta_3 = \beta_4 = 0 \hspace{1cm} H_A: \text{at least one of } \beta_3, \beta_4 \neq 0$$
+
+Recall that the variance-covariance matrix can be extracted with the `vcov(...)` function.
+:::
+
+
+## Questions: Wald test for a contrast
+
+The null hypothesis $H_0: \beta_3 = \beta_4 = 0$ asks whether there is any relationship between passenger class and survival, after accounting for Sex and Age. But now suppose you want to ask a different question: is there a difference in survival between second and third class passengers? 
+
+Neither $\beta_3$ nor $\beta_4$ directly addresses this question. Instead, we want to compare $\beta_3$ and $\beta_4$ to *each other*; our hypotheses are
+
+$$H_0: \beta_3 - \beta_4 = 0 \hspace{1cm} H_A: \beta_3 - \beta_4 \neq 0$$
+
+How should we test these hypotheses? Once again, we can use a Wald test!
+
+:::{.question}
+#### Question 3
+
+Find a matrix ${\bf C}$ such that ${\bf C}\beta = \beta_3 - \beta_4$.
+:::
+
+The difference $\beta_3 - \beta_4$ is called a *contrast*, and is another example of a linear transformation of $\beta$.
+
+
+:::{.question}
+#### Question 4
+
+Calculate the Wald test statistic and p-value for $H_0: \beta_3 - \beta_4 = 0$.
+:::
+
+
+# Wald tests: power
+
+In the second part of this class activity, we will use simulations to investigate the properties of a Wald test. In particular, we are interested in the probability that our test rejects the null hypothesis $H_0$.
+
+For concreteness, consider the Wald test for a population mean which we discussed in class. Suppose that $X_1,...,X_n$ are a sample from some population with mean $\mu$, and we want to test
+
+$$H_0: \mu = \mu_0 \hspace{1cm} H_A: \mu \neq \mu_0$$
+Suppose we know the population variance $\sigma^2$. Our test statistic is then
+
+$$Z_n = \frac{\sqrt{n}(\overline{X}_n - \mu_0)}{\sigma}$$
+
+and we reject $H_0$ when $|Z_n| > z_{\alpha/2}$, where $z_{\alpha/2}$ is the upper $\alpha/2$ quantile of a $N(0, 1)$ distribution, and $\alpha$ is our desired Type I error rate. E.g., if $\alpha = 0.05$, then $z_{\alpha/2} \approx 1.96$.
+
+## Power and type I error
+
+*Power* and *type I error* tell us about the *probability* that we reject $H_0$, under different circumstances. Formally, for the Wald test described above,
+
+$$Power(\mu^*) = P(\text{reject } H_0 | \mu = \mu^*)$$
+Ideally, we want a *high* probability of rejecting $H_0$, if $H_A$ is true. So, we want $Power(\mu^*)$ to be high for values of $\mu^* \neq \mu_0$. But if $H_0$ is true, we want to control the probability of rejecting (because a rejection would be a false positive!). We call $Power(\mu_0)$ the *type I error rate*. Typically, we want $Power(\mu_0) = \alpha$ (where we get to choose $\alpha$, and common values include $\alpha = 0.01$ or $\alpha = 0.05$).
+
+## Simulations
+
+For the purpose of this activity, suppose that $X_1,...,X_n \overset{iid}{\sim} N(\mu, 1)$. We wish to test
+
+$$H_0: \mu = 0 \hspace{1cm} H_A: \mu \neq 0$$
+
+The following code simulates data with $n = 20$ and $\mu = 0$, calculates the test statistic, and checks whether we reject:
+
+
+```{r, eval=F}
+alpha <- 0.05
+n <- 20
+mu <- 0
+x <- rnorm(n, mu)
+z <- sqrt(n)*(mean(x) - 0)/1
+
+# check if reject
+abs(z) > qnorm(alpha/2, lower.tail=F)
+```
+
+
+:::{.question}
+#### Question 5
+
+Repeat the code above many times, and verify that the fraction of times you reject $H_0$ is approximately 0.05. (This is the *type I error*, i.e. $Power(\mu_0)$)
+:::
+
+:::{.question}
+#### Question 6
+
+For fixed sample size $n = 20$, estimate $Power(\mu^*)$ for different values of $\mu^*$, and plot $Power(\mu^*)$ against $\mu^*$. How does power (our probability of rejecting) change as we change $\mu^*$?
+:::
+
+:::{.question}
+#### Question 7
+
+For fixed $\mu^* = 0.2$, estimate $Power(0.2)$ for different values of $n$, and plot $Power(0.2)$ against $n$. How does power (our probability of rejecting) change as we change $n$?
+:::

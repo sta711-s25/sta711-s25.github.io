@@ -11,4 +11,5 @@ February 26
   : [Slides](https://sta711-s25.github.io/slides/lecture_16.pdf), [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_16.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_16_solutions.html)
 
 February 28
-: Wald tests
+: Wald test activity
+  : [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_17.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_17_solutions.html)
