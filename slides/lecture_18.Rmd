@@ -1,0 +1,90 @@
+---
+title: "Lecture 18: t-tests"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Previously: Wald tests for a population mean
+
+Suppose $X_1,...,X_n$ are an iid sample from a population with mean $\mu$ and variance $\sigma^2$. We wish to test
+
+$$H_0: \mu= \mu_0 \hspace{1cm} H_A: \mu \neq \mu_0$$
+
+* If $\sigma^2$ is known:
+
+\vspace{1cm}
+
+* If $\sigma^2$ is unknown:
+
+\vspace{2cm}
+
+## Issue: Wald tests with small $n$
+
+The Wald test for a population mean $\mu$ relies on
+$$Z_n = \frac{\sqrt{n}(\overline{X}_n - \mu)}{s} \approx N(0,1)$$
+
+* $Z_n \overset{d}{\to} N(0,1)$ as $n \to \infty$
+* But for small $n$, $Z_n$ is not normal, even if $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$
+
+What is the exact distribution of $\frac{\sqrt{n}(\overline{X}_n - \mu)}{s}$?
+
+## $t$-tests
+
+If $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$, then
+
+$$\frac{\sqrt{n}(\overline{X}_n - \mu)}{\sigma} \sim N(0, 1)$$
+
+\bigskip
+
+$$\frac{\sqrt{n}(\overline{X}_n - \mu)}{s} \sim t_{n-1}$$
+
+## t-distribution
+
+```{r, echo=F, message=F, warning=F, fig.align='center', fig.width=4, fig.height=3}
+library(tidyverse)
+x <- seq(-4, 4, 0.01)
+y <- c(dt(x, 1), dt(x, 2), dt(x, 5), dnorm(x))
+df <- rep(c("df = 1", "df=2", "df=5", "N(0, 1)"), each = length(x))
+data.frame(x = rep(x, 4), y, df) %>%
+  ggplot(aes(x = x, y = y, color = df)) +
+  geom_line() +
+  labs(y = "Density", color="") +
+  theme_bw() +
+  theme(legend.position="bottom")
+```
+
+## $t$ distribution
+
+**Definition:** Let $Z \sim N(0, 1)$ and $V \sim \chi^2_d$ be independent. Then 
+$$T = \frac{Z}{\sqrt{V/d}} \sim t_d$$
+
+**Claim:** If $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$, then
+$$\frac{\sqrt{n}(\overline{X}_n - \mu)}{s} \sim t_{n-1}$$
+
+\vspace{4cm}
+
+## What we want to show
+
+\vspace{-0.5cm}
+
+$$(n-1) \frac{s^2}{\sigma^2} \sim \chi^2_{n-1} \hspace{2cm} (n-1) \frac{s^2}{\sigma^2} \perp \!\!\! \perp \frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}$$
+
+\vspace{6cm}
+
+## Decomposing the sum of squares
+
+$$\sum \limits_{i=1}^n \left( \frac{X_i - \mu}{\sigma} \right)^2 = \sum \limits_{i=1}^n \left( \frac{X_i - \overline{X}}{\sigma} \right)^2 + n\left( \frac{\overline{X} - \mu}{\sigma}\right)^2$$
+
+\vspace{6cm}
+
+## Cochran's theorem
+
+Let $Z_1,...,Z_n \overset{iid}{\sim} N(0, 1)$, and let $Z = [Z_1,...,Z_n]^T$. Let $A_1,...,A_k \in \mathbb{R}^{n \times n}$ be symmetric matrices such that $Z^TZ = \sum \limits_{i=1}^k Z^T A_i Z$, and let $r_i = rank(A_i)$. Then the following are equivalent:
+
+* $r_1 + \cdots + r_k = n$
+* The $Z^T A_i Z$ are independent
+* Each $Z^T A_i Z \sim \chi^2_{r_i}$
+
+## Application to t-tests
+
+
