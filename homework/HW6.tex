@@ -1,0 +1,171 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{bbm}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+STA 711 Homework 6\\
+\normalsize
+\vspace{5mm}
+\end{center}
+
+\noindent \textbf{Due:} Friday, March 21, 10:00pm on Canvas.\\ 
+
+\noindent \textbf{Instructions:} Submit your work as a single PDF. You may choose to either hand-write your work and submit a PDF scan, or type your work using LaTeX and submit the resulting PDF. See the course website for a \href{https://sta711-s25.github.io/homework/hw_template.tex}{homework template file} and \href{https://sta711-s25.github.io/homework/latex_instructions/}{instructions} on getting started with LaTeX and Overleaf.
+
+\section*{Multivariate normal distributions}
+
+\noindent The multivariate normal distribution will appear frequently in 711, for example as the asymptotic distribution of our coefficient estimates $\widehat{\beta}$. The purpose of this section is to derive a few important properties of this distribution.\\
+
+\noindent To begin, let us formally define the multivariate normal. There are many equivalent definitions (one person's definition is another's ``if and only if'' theorem!). We will define the multivariate normal by first defining a multivariate standard normal, and then defining other multivariate normals as a transformation.\\
+
+\noindent \textbf{Definition (multivariate standard normal):} Let $Z = (Z_1,...,Z_k)^T$ be a $k$-dimensional random vector. We say that $Z \sim N(\bm{0}, {\bf I})$ (the multivariate normal with mean vector $\bm{0} \in \mathbb{R}^k$ and identity covariance matrix ${\bf I} \in \mathbb{R}^{k \times k}$) if
+$$Z_1,...,Z_k \overset{iid}{\sim} N(0, 1)$$
+That is, the components are iid univariate standard normals.\\
+
+\noindent \textbf{Definition (multivariate normal):} Let $X = (X_1,...,X_k)^T$. We say that $X \sim N(\bm{\mu}, \bm{\Sigma})$ if there exists $Z = (Z_1,...,Z_k)^T$ such that $Z \sim N(\bm{0}, {\bf I})$ and
+$$X =\bm{\mu} + {\bf A} Z$$
+where $\bm{\Sigma} = {\bf A} {\bf A}^T$.\\
+
+
+\begin{enumerate}
+
+\item Let $X \in \mathbb{R}^k$ such that $X \sim N(\bm{\mu}, \bm{\Sigma})$, and let ${\bf a} \in \mathbb{R}^m$ and ${\bf B} \in \mathbb{R}^{m \times k}$. Using the definitions above, show that
+$${\bf a} + {\bf B} X \sim N({\bf a} + {\bf B} \bm{\mu}, {\bf B} \bm{\Sigma} {\bf B}^T)$$
+
+
+\item Now let us prove some further properties of multivariate normal distributions:
+
+\begin{enumerate}
+
+\item Let $X \sim N(\bm{\mu}, \bm{\Sigma})$, where $X \in \mathbb{R}^q$. Suppose that for some $1 \leq p < q$, $\bm{\Sigma}$ can be partitioned as
+$$\bm{\Sigma} = \begin{pmatrix}
+\bm{\Sigma}_{11} & \bm{0}_{p \times (q - p)} \\
+\bm{0}_{(q - p) \times p} & \bm{\Sigma}_{22}
+\end{pmatrix},$$
+where $\bm{\Sigma}_{11}$ is $p \times p$, $\bm{\Sigma}_{22}$ is $(q - p) \times (q - p)$, and $\bm{0}_{m \times n}$ denotes the matrix of zeros of the specified dimensions. Similarly partition 
+$$X = \begin{pmatrix}
+X_{(1)} \\
+X_{(2)}
+\end{pmatrix} \hspace{1cm} \bm{\mu} = \begin{pmatrix}
+\bm{\mu}_{(1)} \\
+\bm{\mu}_{(2)}
+\end{pmatrix},$$
+into vectors of length $p$ and $q - p$. Prove that 
+$$X_{(1)} \sim N(\bm{\mu}_{(1)}, \bm{\Sigma}_{11}), \hspace{0.5cm} X_{(2)} \sim N(\bm{\mu}_{(2)}, \bm{\Sigma}_{22}),$$
+and $X_{(1)}$ and $X_{(2)}$ are independent.
+
+\item Using (a), conclude that if $X = (X_1,...,X_q)^T \sim N(\bm{\mu}, \bm{\Sigma})$, then the entries $X_i$ and $X_j$ are independent \textit{if and only} if $\bm{\Sigma}_{ij} = Cov(X_i, X_j) = 0$. (That is, while 0 covariance does not usually imply independence, it \textit{does} for entries of a multivariate normal).
+
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+\section*{Logistic regression with earthquake data}
+
+In the second part of this assignment, you will work with a dataset from DrivenData, an online data competition site that hosts competitions aimed at improving education, health, safety, and general well being for individuals around the world.\\
+
+\noindent Our data come from the 2015 Gorkha earthquake in Nepal. After the earthquake, a large scale survey was conducted to determine the amount of damage the earthquake caused for homes, businesses and other structures. This is one of the largest post-disaster surveys in the world, and researchers are interested in which building characteristics are associated with earthquake damage.\\
+
+\noindent You will work with a subset of the earthquake data, consisting of 211774 buildings, containing the following variables:
+\begin{itemize}
+\item \verb;Damage;: whether the building sustained any damage (1) or not (0)
+
+\item \verb;Age;: the age of the building (in years)
+
+\item \verb;Surface;: a categorical variable recording the surface condition of the land around the building. There are three different levels: \verb;n;, \verb;o;, and \verb;t;. (The researchers who collected the data anonymized the level names to protect inhabitants' privacy).
+\end{itemize}
+
+\noindent You can load the data into R by
+\begin{verbatim}
+earthquake <- read.csv("https://sta711-s25.github.io/homework/earthquake_small.csv")
+\end{verbatim}
+
+\noindent You will work with the following logistic regression model (you may assume all assumptions are met; no transformations or diagnostics are needed):
+$$Damage_i \sim Bernoulli(p_i)$$
+$$\log \left( \dfrac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 Age_i + \beta_2 SurfaceO_i + \beta_3 SurfaceT_i + \beta_4 Age_i \cdot SurfaceO_i + \beta_5 Age_i \cdot SurfaceT_i$$
+
+where $SurfaceO$ and $SurfaceT$ are indicator variables for whether surface is o or t, respectively.\\
+
+\begin{enumerate}
+\item[3.] 
+\begin{enumerate}
+\item Fit the logistic regression model in R, and interpret the estimated slope $\widehat{\beta}_1$ in terms of the \textit{odds} of damage.
+
+\item Calculate the estimated probability of damage for a 50 year old building with surface condition = t.
+\end{enumerate}
+
+\item[4.] The researchers want to know whether the relationship between Age and the probability of damage is the same for buildings in all three surface conditions. Use a Wald test to address the researchers' question; you should state the hypotheses in terms of one or more model parameters, calculate a test statistic and p-value, and make a conclusion.
+
+\end{enumerate}
+
+\section*{Global F-test}
+
+Suppose that $V_1 \sim \chi^2_{d_1}$ and $V_2 \sim \chi^2_{d_2}$ are independent $\chi^2$ random variables. Then 
+$$F = \dfrac{V_1/d_1}{V_2/d_2} \sim F_{d_1, d_2}$$
+where $F_{d_1, d_2}$ denotes the $F$-distribution with numerator degrees of freedom $d_1$ and denominator degrees of freedom $d_2$.\\
+
+\noindent The $F$-distribution is important for hypothesis testing in linear regression models. Suppose we observe independent data $(X_1, Y_1),...,(X_n, Y_n)$, where $Y_i = \beta^T X_i + \varepsilon_i$, with $\beta = (\beta_0, ..., \beta_k)^T$ and $\varepsilon_i \overset{iid}{\sim} N(0, \sigma^2)$. We wish to test the hypotheses
+$$H_0: \beta_1 = \cdots = \beta_k = 0 \hspace{1cm} H_A: \text{at least one of } \beta_1,...,\beta_k \neq 0.$$
+The $F$-test for these hypotheses is based on the $F$-statistic
+$$F = \dfrac{(SSTO - SSE)/k}{SSE/(n - k - 1)},$$
+where $F \sim F_{k, n-k-1}$ under $H_0$, and
+\begin{align*}
+SSTO = \sum \limits_{i=1}^n (Y_i - \overline{Y})^2 \hspace{1cm} SSE = \sum \limits_{i=1}^n (Y_i - \widehat{Y}_i)^2
+\end{align*}
+where 
+$$\widehat{Y} = \begin{pmatrix}
+\widehat{Y}_1 \\ \vdots \\ \widehat{Y}_n
+\end{pmatrix} = {\bf X}({\bf X}^T{\bf X})^{-1} {\bf X}^T Y$$
+
+\noindent The goal of this part of the assignment is to demonstrate that, indeed, $F \sim F_{k, n-k-1}$ under $H_0$.
+
+\begin{enumerate}
+
+\item[5.] The matrix ${\bf H} = {\bf X}({\bf X}^T{\bf X})^{-1} {\bf X}^T$ is often called the \textit{hat} matrix (because it puts a ``hat'' on $Y$). Show that ${\bf H}$ is idempotent.
+
+\item[6.] The rank of an idempotent matrix is equal to its trace. Using this fact, show that 
+$$\text{rank}({\bf H}) = k+1$$
+
+\item[7.] Let ${\bf J}_n$ be the $n \times n$ matrix of all 1s. Using the fact that ${\bf H} {\bf X} = {\bf X}$, argue that ${\bf H} {\bf J}_n = {\bf J}_n$.
+
+\item[8.] Using the previous question, show that ${\bf H} - \frac{1}{n} {\bf J}_n$ is idempotent.
+
+\item[9.] Show that
+
+$$SSTO = SSE + \sum \limits_{i=1}^n (\widehat{Y}_i - \overline{Y})^2$$
+
+\item[10.] Show that
+
+$$\sum \limits_{i=1}^n (Y_i - \beta_0)^2 = SSE + \sum \limits_{i=1}^n (\widehat{Y}_i - \overline{Y})^2 + n (\overline{Y} - \beta_0)^2$$
+
+
+\item[11.] Show that under $H_0$, $\frac{1}{\sigma^2}\sum \limits_{i=1}^n (Y_i - \beta_0)^2 \sim \chi^2_n$.
+
+\item[12.] Using the above questions, find symmetric matrices $A_1, A_2, A_3$ such that under $H_0$, 
+$$\frac{1}{\sigma^2}\sum \limits_{i=1}^n (Y_i - \beta_0)^2 = Z^T A_1 Z + Z^T A_2 Z + Z^T A_3 Z$$
+where $Z \sim N(\bm{0}, {\bf I})$, $\frac{1}{\sigma^2} SSE = Z^T A_1 Z$, and $\frac{1}{\sigma^2} (SSTO - SSE) = Z^T A_2 Z$.
+
+\item[13.] Using the matrices $A_1, A_2, A_3$ from the previous question, show that $rank(A_1) = n-k-1$, $rank(A_2) = k$, and $rank(A_3) = 1$.
+
+\item[14.] By applying Cochran's theorem, show that $F = \dfrac{(SSTO - SSE)/k}{SSE/(n - k - 1)} \sim F_{k, n-k-1}$ under $H_0$.
+\end{enumerate}
+
+\end{document}

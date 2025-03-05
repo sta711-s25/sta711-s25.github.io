@@ -10,5 +10,8 @@ March 5
 : Hypothesis testing
   : [Slides](https://sta711-s25.github.io/slides/lecture_19.pdf)
 
+: **Homework 6 released**{: .label .label-yellow }
+  : [HW 6](https://sta711-s25.github.io/homework/HW6.pdf)
+
 March 7
 : Hypothesis testing
