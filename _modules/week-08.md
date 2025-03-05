@@ -8,6 +8,7 @@ March 3
       
 March 5
 : Hypothesis testing
+  : [Slides](https://sta711-s25.github.io/slides/lecture_19.pdf)
 
 March 7
 : Hypothesis testing
