@@ -14,4 +14,5 @@ March 5
   : [HW 6](https://sta711-s25.github.io/homework/HW6.pdf)
 
 March 7
-: Hypothesis testing
+: p-values and intro to Neyman-Pearson
+  : [Slides](https://sta711-s25.github.io/slides/lecture_20.pdf)
