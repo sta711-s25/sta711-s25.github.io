@@ -1,0 +1,44 @@
+---
+title: "Lecture 21: Neyman-Pearson lemma"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Neyman-Pearson test
+
+Let $X_1,...,X_n$ be a sample from some distribution with probability function $f$ and parameter $\theta$. To test
+
+$$H_0: \theta = \theta_0 \hspace{1cm} H_A: \theta = \theta_1,$$
+
+the **Neyman-Pearson** test rejects $H_0$ when 
+
+$$\dfrac{L(\theta_1 | X)}{L(\theta_0 | X)} = \dfrac{f(X_1,...,X_n | \theta_1)}{f(X_1,...,X_n | \theta_0)} > k$$
+where $k$ is chosen so that $\beta(\theta_0) = \alpha$.
+
+## Warm-up
+
+Let $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$, with pmf $f(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}$. We want to test $H_0: \lambda = \lambda_0$ vs. $H_A: \lambda = \lambda_1$, where $\lambda_1 > \lambda_0$. The Neyman-Pearson test rejects when
+$$\dfrac{L(\lambda_1 | {\bf X})}{L(\lambda_0 | {\bf X})} > k.$$
+
+1. Calculate $\dfrac{L(\lambda_1 | {\bf X})}{L(\lambda_0 | {\bf X})}$
+2. Rearrange the ratio to show that $\dfrac{L(\lambda_1 | {\bf X})}{L(\lambda_0 | {\bf X})} > k$ if and only if $\sum_i X_i > c$ for some $c$
+3. Using the fact that $\sum_i X_i \sim Poisson(n\lambda)$, find $c$ such that $\beta(\lambda_0) = \alpha$
+
+## Uniformly most powerful tests
+
+**Big idea:** can't do better than the Neyman-Pearson test for two simple hypotheses!
+
+What does it mean for one test to be "better" than another?
+
+**Definition:** Consider testing $H_0: \theta \in \Theta_0$ vs. $H_A: \theta \in \Theta_1$. Let $\mathcal{C}_\alpha$ be the set of level $\alpha$ tests for these hypotheses. A test in $C_\alpha$ is the **uniformly most powerful** level $\alpha$ test if:
+
+\vspace{4cm}
+
+## Neyman-Pearson lemma
+
+**Lemma:** The Neyman-Pearson test is a *uniformly most powerful* level $\alpha$ test of $H_0: \theta = \theta_0$ vs. $H_A: \theta = \theta_1$.
+
+\vspace{6cm}
+
+
+
