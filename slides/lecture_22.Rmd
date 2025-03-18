@@ -1,0 +1,173 @@
+---
+title: "Lecture 22: Binary classification"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+```{r include=F}
+library(knitr)
+library(tidyverse)
+
+titanic <- read.csv("https://sta214-f22.github.io/labs/Titanic.csv")
+
+titanic <- titanic %>%
+  drop_na() %>%
+  mutate(Pclass = factor(Pclass, levels = c(3, 2, 1)))
+
+m1 <- glm(Survived ~ Sex*Age + Pclass, data = titanic, family = binomial)
+```
+
+## Types of research questions
+
+For a logistic regression model, we have learned how to answer the following types of questions:
+
+* What is the predicted probability for each observation in the data?
+* What is the relationship between the explanatory variable(s) and the response?
+* Do we have strong evidence for a relationship between these variables?
+
+Another research question:
+
+* How well do we predict the response?
+
+## Making predictions with the Titanic data
+
+* For each passenger, we calculate $\widehat{p}_i$ (estimated probability of survival)
+* But, we want to predict *which* passengers actually survive
+
+**Question:** How do we turn $\widehat{p}_i$ into a binary prediction of survival / no survival?
+
+\vspace{4cm}
+
+
+## Confusion matrix
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 344 | 70 |
+| | $\widehat{Y} = 1$ | 80 | 220 |
+
+**Question:** Did we do a good job predicting survival?
+
+\vspace{4cm}
+
+## Why a threshold of 0.5?
+
+**Question:** Why might a threshold of 0.5 be a common choice when making binary predictions?
+
+\vspace{5cm}
+
+## Why a threshold of 0.5?
+
+Consider data $(X, Y)$ with $X \in \mathbb{R}^d$ and $Y \in \{0, 1\}$. Fit a model to estimate
+$$p(x) = P(Y = 1 | X = x)$$
+Our binary predictions are
+$$\widehat{Y} = \begin{cases} 1 & p(x) \geq h \\ 0 & p(x) < h \end{cases}$$
+The **classification error** is given by $P(\widehat{Y} \neq Y)$.
+
+**Claim:** For any binary classifier, $h = 0.5$ minimizes classification error.
+
+## Why a threshold of 0.5?
+
+**Claim:** For any binary classifier, $h = 0.5$ minimizes classification error.
+
+\vspace{6cm}
+
+## Another confusion matrix
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 3957 | 1631 |
+| | $\widehat{Y} = 1$ | 66 | 66 |
+
+**Question:** Did we do a good job predicting the response?
+
+\vspace{4cm}
+
+## Classification metrics
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 3957 | 1631 |
+| | $\widehat{Y} = 1$ | 66 | 66 |
+
+**Accuracy:** $\widehat{P}(\widehat{Y} = Y) = \dfrac{TP + TN}{\text{total}}$
+
+**Sensitivity:** $\widehat{P}(\widehat{Y} = 1 | Y = 1) = \dfrac{TP}{TP + FN}$
+
+**Specificity:** $\widehat{P}(\widehat{Y} = 0 | Y = 0) = \dfrac{TN}{TN + FP}$
+
+## Changing the threshold
+
+Threshold of 0.7:
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 412 | 136 |
+| | $\widehat{Y} = 1$ | 12 | 154 |
+
+\vspace{0.5cm}
+
+Threshold of 0.3:
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 309 | 49 |
+| | $\widehat{Y} = 1$ | 115 | 241 |
+
+\vspace{1cm}
+
+## ROC curve: consider all thresholds
+
+```{r echo=F, message=F, warning=F, fig.align='center', fig.width=3.5, fig.height=3.5}
+library(ROCR)
+pred <- prediction(m1$fitted.values, titanic$Survived)
+perf <- performance(pred,"tpr","fpr")
+
+# performance(pred, "auc")@y.values # 0.858
+
+data.frame(fpr = perf@x.values[[1]],
+           tpr = perf@y.values[[1]]) %>%
+  ggplot(aes(x = fpr, y = tpr)) +
+  geom_line() +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  labs(x = "False positive rate (1 - Specificity)",
+       y = "True positive rate (Sensitivity)") +
+  theme_classic()
+```
+
+## Binary classification vs. hypothesis testing
+
+* Both binary classification and hypothesis testing involve deciding between two options
+* Error metrics for both involve looking at correct decisions, false positives (type I errors), false negatives (type II errors)
+
+**Question:** How do binary classification and hypothesis testing *differ*?
+
+\vspace{4cm}
+
+## Binary classification vs. hypothesis testing
+
+Binary classification:
+
+* Can use training data to estimate performance and so choose a threshold
+* Thresholds are chosen to maximize some combination of sensitivity and specificity
+
+Hypothesis testing:
+
+* Conceptually a two-step approach: control type I error, then hope to have good power (i.e., don't consider tests which have high type I error)
+* Only see one test result; don't get to estimate type I error or power from a single test
+* Want theoretical guarantees that (if assumptions are met) type I error can be controlled at desired level
+
+## Binary classification vs. hypothesis testing
+
+\vspace{-2cm}
+
+* Usual approach to binary classification: maximize some combination of sensitivity and specificity
+
+* Neyman-Pearson classification^[Scott, C., & Nowak, R. (2005). A Neyman-Pearson approach to statistical learning. *IEEE Transactions on Information Theory*, 51(11), 3806-3819.]: control probability of false positives (1 - specificity) at desired level, then try to maximize sensitivity 
+
+**Question:** Why might you choose one of these approaches over the other?
