@@ -7,7 +7,8 @@ March 17
   : [Slides](https://sta711-s25.github.io/slides/lecture_21.pdf)
       
 March 19
-: Hypothesis testing vs. prediction
+: Hypothesis testing vs. binary classification
+  : [Slides](https://sta711-s25.github.io/slides/lecture_22.pdf)
 
 March 21
 : Likelihood ratio tests
