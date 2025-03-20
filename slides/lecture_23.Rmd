@@ -1,0 +1,160 @@
+---
+title: "Lecture 23: Likelihood ratio tests"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+```{r include=F}
+library(knitr)
+library(tidyverse)
+
+titanic <- read.csv("https://sta214-f22.github.io/labs/Titanic.csv")
+
+titanic <- titanic %>%
+  drop_na() %>%
+  mutate(Pclass = factor(Pclass, levels = c(3, 2, 1)))
+
+m1 <- glm(Survived ~ Sex*Age + Pclass, data = titanic, family = binomial)
+```
+
+## Course logistics
+
+* HW 6 due today, HW 7 on course website
+* Exam 1 done (woo!)
+* Exam 2 plan: released on April 11, due April 18
+    * Focus on convergence, hypothesis testing, maybe confidence intervals
+    * Would cover HW 5 -- HW 8
+
+
+## Last time: binary classification and classification error
+
+Consider data $(X, Y)$ with $X \in \mathbb{R}^d$ and $Y \in \{0, 1\}$. Fit a model to estimate
+$$p(x) = P(Y = 1 | X = x)$$
+Our binary predictions are
+$$\widehat{Y} = \begin{cases} 1 & p(x) \geq h \\ 0 & p(x) < h \end{cases}$$
+The **classification error** is given by $P(\widehat{Y} \neq Y)$.
+
+**Result:** For any binary classifier, $h = 0.5$ minimizes classification error.
+
+## Changing the threshold
+
+Threshold of 0.7:
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 412 | 136 |
+| | $\widehat{Y} = 1$ | 12 | 154 |
+
+\vspace{0.5cm}
+
+Threshold of 0.3:
+
+| | | **Actual** | |
+| --- | --- | --- | --- |
+| | | $Y = 0$ | $Y = 1$ |
+|**Predicted** | $\widehat{Y} = 0$ | 309 | 49 |
+| | $\widehat{Y} = 1$ | 115 | 241 |
+
+\vspace{1cm}
+
+## ROC curve: consider all thresholds
+
+```{r echo=F, message=F, warning=F, fig.align='center', fig.width=3.5, fig.height=3.5}
+library(ROCR)
+pred <- prediction(m1$fitted.values, titanic$Survived)
+perf <- performance(pred,"tpr","fpr")
+
+# performance(pred, "auc")@y.values # 0.858
+
+data.frame(fpr = perf@x.values[[1]],
+           tpr = perf@y.values[[1]]) %>%
+  ggplot(aes(x = fpr, y = tpr)) +
+  geom_line() +
+  geom_abline(slope = 1, intercept = 0, lty = 2) +
+  labs(x = "False positive rate (1 - Specificity)",
+       y = "True positive rate (Sensitivity)") +
+  theme_classic()
+```
+
+## Binary classification vs. hypothesis testing
+
+* Both binary classification and hypothesis testing involve deciding between two options
+* Error metrics for both involve looking at correct decisions, false positives (type I errors), false negatives (type II errors)
+
+**Question:** How do binary classification and hypothesis testing *differ*?
+
+\vspace{4cm}
+
+## Binary classification vs. hypothesis testing
+
+Binary classification:
+
+* Can use training data to estimate performance and so choose a threshold
+* Thresholds are chosen to maximize some combination of sensitivity and specificity
+
+Hypothesis testing:
+
+* Conceptually a two-step approach: control type I error, then hope to have good power (i.e., don't consider tests which have high type I error)
+* Only see one test result; don't get to estimate type I error or power from a single test
+* Want theoretical guarantees that (if assumptions are met) type I error can be controlled at desired level
+
+## Binary classification vs. hypothesis testing
+
+\vspace{-2cm}
+
+* Usual approach to binary classification: maximize some combination of sensitivity and specificity
+
+* Neyman-Pearson classification^[Scott, C., & Nowak, R. (2005). A Neyman-Pearson approach to statistical learning. *IEEE Transactions on Information Theory*, 51(11), 3806-3819.]: control probability of false positives (1 - specificity) at desired level, then try to maximize sensitivity 
+
+**Question:** Why might you choose one of these approaches over the other?
+
+## Previously: Neyman-Pearson test
+
+**Example:** Let $X_1,...,X_n \overset{iid}{\sim} Exponential(\theta)$, with pdf $f(x|\theta) = \theta e^{-\theta x}$. We want to test
+$$H_0: \theta = \theta_0 \hspace{1cm} H_A: \theta = \theta_1,$$
+where $\theta_1 < \theta_0$. The Neyman-Pearson test rejects when
+$$\dfrac{L(\theta_1 | {\bf X})}{L(\theta_0 | {\bf X})} > k.$$
+
+**Question:** What should I do if I want to test the hypotheses
+
+$$H_0: \theta = \theta_0 \hspace{1cm} H_A: \theta \neq \theta_0$$
+
+## Likelihood ratio test
+
+Let $X_1,...,X_n$ be a sample from a distribution with parameter $\theta \in \mathbb{R}^d$. We wish to test $H_0: \theta \in \Theta_0$ vs. $H_A: \theta \in \Theta_1$.
+
+The **likelihood ratio test** (LRT) rejects $H_0$ when
+
+$$\frac{\sup \limits_{\theta \in \Theta_1} L(\theta | {\bf X})}{\sup \limits_{\theta \in \Theta_0} L(\theta | {\bf X})} > k,$$
+where $k$ is chosen such that $\sup \limits_{\theta \in \Theta_0} \beta_{LR}(\theta) \leq \alpha$.
+
+## Example
+
+Let $X_1,...,X_n \overset{iid}{\sim} Exponential(\theta)$, with pdf $f(x|\theta) = \theta e^{-\theta x}$. We want to test
+$$H_0: \theta = \theta_0 \hspace{1cm} H_A: \theta \neq \theta_0$$
+
+\vspace{5cm}
+
+## Example
+
+Plot of $\theta_0 \overline{X} - \log(\theta_0 \overline{X})$:
+
+```{r, echo=F, fig.width=4, fig.height=3.5}
+x <- seq(0.0001, 5, 0.01)
+y <- x - log(x)
+plot(x, y, type="l", xlab="", ylab="")
+```
+
+\vspace{4cm}
+
+
+## Example: linear regression with normal data
+
+Suppose we observe $(X_1, Y_1),...,(X_n, Y_n)$, where $Y_i = \beta^T X_i + \varepsilon_i$ and $\varepsilon_i \overset{iid}{\sim} N(0, \sigma^2)$. Partition $\beta = (\beta_{(1)}, \beta_{(2)})^T$. We wish to test $H_0: \beta_{(2)} = 0$ vs. $H_A: \beta_{(2)} \neq 0$.
+
+\vspace{5cm}
+
+
+
+
