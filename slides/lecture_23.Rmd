@@ -21,7 +21,7 @@ m1 <- glm(Survived ~ Sex*Age + Pclass, data = titanic, family = binomial)
 
 * HW 6 due today, HW 7 on course website
 * Exam 1 done (woo!)
-* Exam 2 plan: released on April 11, due April 18
+* Exam 2 plan: released on April 4, due April 11
     * Focus on convergence, hypothesis testing, maybe confidence intervals
     * Would cover HW 5 -- HW 8
 
