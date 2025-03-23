@@ -1,0 +1,44 @@
+---
+title: "Lecture 24: Likelihood ratio tests"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Likelihood ratio test
+
+Let $X_1,...,X_n$ be a sample from a distribution with parameter $\theta \in \mathbb{R}^d$. We wish to test $H_0: \theta \in \Theta_0$ vs. $H_A: \theta \in \Theta_1$.
+
+The **likelihood ratio test** (LRT) rejects $H_0$ when
+
+$$\frac{\sup \limits_{\theta \in \Theta_1} L(\theta | {\bf X})}{\sup \limits_{\theta \in \Theta_0} L(\theta | {\bf X})} > k,$$
+where $k$ is chosen such that $\sup \limits_{\theta \in \Theta_0} \beta_{LR}(\theta) \leq \alpha$.
+
+## Example: linear regression with normal data
+
+Suppose we observe $(X_1, Y_1),...,(X_n, Y_n)$, where $Y_i = \beta^T X_i + \varepsilon_i$ and $\varepsilon_i \overset{iid}{\sim} N(0, \sigma^2)$. Partition $\beta = (\beta_{(1)}, \beta_{(2)})^T$. We wish to test $H_0: \beta_{(2)} = 0$ vs. $H_A: \beta_{(2)} \neq 0$.
+
+\vspace{5cm}
+
+## Asymptotics of the LRT
+
+Suppose we observe iid data $X_1,...,X_n$ from a distribution with parameter $\theta \in \mathbb{R}$, and we wish to test $H_0: \theta = \theta_0$ vs. $H_A: \theta \neq \theta_0$. 
+
+**Theorem:** Under $H_0$,
+
+$$2 \log \left( \frac{L(\widehat{\theta}_{MLE} | {\bf X})}{L(\theta_0 | {\bf X})} \right) \overset{d}{\to} \chi^2_1$$
+
+\vspace{4cm}
+
+
+## Generalization to higher dimensions
+
+Suppose we observe iid data $X_1,...,X_n$ with parameter $\theta \in \mathbb{R}^d$. Partition $\theta = (\theta_{(1)}, \theta_{(2)})^T$, with $\theta_{(2)} \in \mathbb{R}^q$. We wish to test
+$$H_0: \theta_{(2)} = {\bf 0} \hspace{1cm} H_A: \theta_{(2)} \neq {\bf 0}$$
+
+**Theorem:** Under $H_0$, 
+
+$$2 \log \left( \frac{\sup_\theta L(\theta | {\bf X})}{\sup \limits_{\theta: \theta_{(2)} = 0} L(\theta | {\bf X})} \right) \overset{d}{\to} \chi^2_q$$
+
+\vspace{4cm}
+
+

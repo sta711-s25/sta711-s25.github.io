@@ -1,0 +1,60 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{bbm}
+
+\newcommand{\indep}{\perp \!\!\! \perp}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+Asymptotic distribution of the LRT \\
+\normalsize
+\vspace{5mm}
+\end{center}
+
+\noindent Suppose we observe iid data $X_1,...,X_n$ from a distribution with parameter $\theta \in \mathbb{R}$, and we wish to test $H_0: \theta = \theta_0$ vs. $H_A: \theta \neq \theta_0$.\\
+
+\noindent \textbf{Theorem:} Under $H_0$,
+
+$$2 \log \left( \frac{L(\widehat{\theta}_{MLE} | {\bf X})}{L(\theta_0 | {\bf X})} \right) \overset{d}{\to} \chi^2_1$$
+
+\subsection*{Key proof pieces}
+
+\begin{enumerate}
+\item Let $\ell(\theta) = \log L(\theta | {\bf X})$ denote the log-likelihood. Using a second-order Taylor expansion of $\ell(\theta_0)$ around $\widehat{\theta}$, argue that if $\widehat{\theta}_{MLE}$ is close to $\theta_0$ then
+$$2 \ell(\widehat{\theta}) - 2 \ell(\theta_0) \approx -\ell''(\widehat{\theta})(\widehat{\theta} - \theta_0)^2 = -\frac{1}{n} \ell''(\widehat{\theta}) (\sqrt{n}(\widehat{\theta} - \theta_0) )^2$$
+
+\vspace{7cm}
+
+\item Using results previously derived (when proving the asymptotic normality of the MLE), find the limits for the following two quantities when $H_0$ is true:
+
+\begin{itemize}
+\item $-\frac{1}{n} \ell''(\widehat{\theta}) \overset{p}{\to}$
+\bigskip
+\item $\sqrt{n}(\widehat{\theta} - \theta_0) \overset{d}{\to}$
+\end{itemize}
+
+\newpage
+
+
+\item Apply Slutsky's theorem and the continuous mapping theorem to argue that
+
+$$2 \ell(\widehat{\theta}) - 2 \ell(\theta_0) \overset{d}{\to} \chi^2_1$$
+
+\end{enumerate}
+
+\end{document}
