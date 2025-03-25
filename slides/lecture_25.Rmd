@@ -1,0 +1,103 @@
+---
+title: "Lecture 25: Likelihood ratio tests"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+```{r include=F}
+library(knitr)
+library(tidyverse)
+library(MASS)
+library(foreign)
+library(statmod)
+library(gridExtra)
+
+earthquake <- read.csv("https://sta711-s23.github.io/homework/earthquake_small.csv")
+
+```
+
+## Asymptotics of the LRT
+
+Suppose we observe iid data $X_1,...,X_n$ from a distribution with parameter $\theta \in \mathbb{R}$, and we wish to test $H_0: \theta = \theta_0$ vs. $H_A: \theta \neq \theta_0$. 
+
+**Theorem:** Under $H_0$ (and assuming required regularity conditions),
+
+$$2 \log \left( \frac{L(\widehat{\theta}_{MLE} | {\bf X})}{L(\theta_0 | {\bf X})} \right) \overset{d}{\to} \chi^2_1$$
+
+\vspace{4cm}
+
+
+## Generalization to higher dimensions
+
+Suppose we observe iid data $X_1,...,X_n$ with parameter $\theta \in \mathbb{R}^d$. Partition $\theta = (\theta_{(1)}, \theta_{(2)})^T$, with $\theta_{(2)} \in \mathbb{R}^q$. We wish to test
+$$H_0: \theta_{(2)} = {\bf 0} \hspace{1cm} H_A: \theta_{(2)} \neq {\bf 0}$$
+
+**Theorem:** Under $H_0$ (and assuming required regularity conditions), 
+
+$$2 \log \left( \frac{\sup_\theta L(\theta | {\bf X})}{\sup \limits_{\theta: \theta_{(2)} = 0} L(\theta | {\bf X})} \right) \overset{d}{\to} \chi^2_q$$
+
+\vspace{4cm}
+
+## Earthquake data
+
+Data from the 2015 Gorkha earthquake on 211774 buildings, with variables including:
+
+* `Damage`: whether the building sustained any damage (1) or not (0)
+* Age: the age of the building (in years)
+* `Surface`: a categorical variable recording the surface condition of the land around the building. There are three different levels: n, o, and t
+
+
+## Likelihood ratio tests
+
+```{r, echo=T}
+m1 <- glm(Damage ~ Age*Surface, data = earthquake,
+          family = binomial)
+summary(m1)$coefficients
+```
+
+We want to test whether the relationship between Age and Damage is the same for all three surface conditions. What hypotheses do we test?
+
+
+## Likelihood ratio tests
+
+**Full model:**
+
+```{r, eval=F, echo=T}
+m1 <- glm(Damage ~ Age*Surface, data = earthquake,
+          family = binomial)
+```
+
+**Reduced model:**
+
+```{r, eval=F, echo=T}
+m2 <- glm(Damage ~ Age + Surface, data = earthquake,
+          family = binomial)
+```
+
+
+## Comparing deviances
+
+```{r, echo=T}
+m1 <- glm(Damage ~ Age*Surface, data = earthquake,
+          family = binomial)
+m1$deviance
+
+m2 <- glm(Damage ~ Age + Surface, data = earthquake,
+          family = binomial)
+m2$deviance
+```
+
+## Comparing deviances
+
+```{r, echo=T}
+m1 <- glm(Damage ~ Age*Surface, data = earthquake,
+          family = binomial)
+
+m2 <- glm(Damage ~ Age + Surface, data = earthquake,
+          family = binomial)
+
+pchisq(m2$deviance - m1$deviance,
+       m2$df.residual - m1$df.residual,
+       lower.tail = F)
+```
+
