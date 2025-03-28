@@ -1,0 +1,53 @@
+---
+title: "Class activity solutions"
+format: html
+editor: source
+author: "Ciaran Evans"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=F)
+knitr::opts_chunk$set(warning=F)
+```
+
+1.
+
+
+```{r}
+nsim <- 1000
+wald_stats <- rep(NA, nsim)
+lrt_stats <- rep(NA, nsim)
+
+n <- 100
+beta0 <- 0.5
+beta1 <- 2/sqrt(n)
+
+for(i in 1:nsim){
+  x <- rnorm(n)
+  p <- exp(beta0 + beta1 * x)/(1 + exp(beta0 + beta1 * x))
+  y <- rbinom(n, 1, p)
+  
+  m1 <- glm(y ~ x, family = binomial)
+
+  # test statistics
+  wald_stats[i] <- summary(m1)$coefficients[2,3]^2
+  lrt_stats[i] <- m1$null.deviance - m1$deviance
+}
+
+lambda <- 4/(n*summary(m1)$coefficients[2,2]^2)
+
+grid_pts <- seq(0, 5, by=0.1)
+plot(grid_pts, ecdf(wald_stats)(grid_pts), type="l",
+     xlab = "x", ylab = "CDF of Wald statistics", main = "n = 100")
+points(grid_pts, pchisq(grid_pts, 1, ncp=lambda), type="l", col="red")
+```
+
+2.
+
+```{r}
+plot(wald_stats, lrt_stats, xlab = "Wald statistic", ylab = "LRT statistic")
+abline(a = 0, b=1, lty=2, col="red")
+```
+

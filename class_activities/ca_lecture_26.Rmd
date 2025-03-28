@@ -1,0 +1,50 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Exploring Wald and likelihood ratio tests
+
+The purpose of this class activity is to compare the Wald and likelihood ratio test statistics, and their asymptotic distributions.
+
+For this class assignment, suppose we observe data $(X_1, Y_1), ..., (X_n, Y_n)$, where 
+$$X_i \overset{iid}{\sim} N(0, 1)$$
+$$Y_i \sim Bernoulli(p_i)$$
+$$\log \left( \frac{p_i}{1 - p_i} \right) = \beta_0 + \beta_1 X_i$$
+
+We wish to test the hypotheses $H_0: \beta_1 = 0$ vs. $H_A: \beta_1 \neq 0$. Since this is a two-sided test the Wald statistic for these hypotheses can either be written 
+
+$$Z = \frac{\widehat{\beta}_1 - 0}{SD(\widehat{\beta}_1)}$$
+or
+
+$$W = \frac{(\widehat{\beta}_1 - 0)^2}{Var(\widehat{\beta}_1)}$$
+and the likelihood ratio test statistic is
+$$G = 2 \ell(\widehat{\beta}_{full}) - 2 \ell(\widehat{\beta}_{reduced})$$
+
+## Questions
+
+Use the code below to generate data from the model with $\beta_0 = 0.5$, $\beta_1 = 0$, and $n = 100$:
+
+```{r, eval=F}
+n <- 100
+beta0 <- 0.5
+beta1 <- 0
+x <- rnorm(n)
+p <- exp(beta0 + beta1 * x)/(1 + exp(beta0 + beta1 * x))
+y <- rbinom(n, 1, p)
+```
+
+
+### Local alternatives
+
+Now consider testing against a *local* alternative (i.e., the difference between the null and alternative hypotheses is 0 in the limit). Our hypotheses are still $H_0: \beta_1 = 0$ vs. $\beta_1 \neq 0$, but the true value of $\beta_1$ is $\beta_1 = 2/\sqrt{n}$.
+
+1. In simulations, show that $W = \frac{(\widehat{\beta}_1 - 0)^2}{Var(\widehat{\beta}_1)} \approx \chi^2_1(\lambda)$, and find an expression for $\lambda$ in terms of $\beta_1$ and $Var(\widehat{\beta}_1)$. (In R, the `ncp` argument in the `rchisq` and `pchisq` functions will be helpful)
+
+2. When $\beta_1 = 2/\sqrt{n}$, how does the distribution of $G$ compare to the distribution of $W$? Experiment with different values of $n$.
+
+

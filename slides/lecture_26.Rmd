@@ -1,0 +1,44 @@
+---
+title: "Lecture 26: Wald vs. LRT"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Comparing Wald and LRT statistics
+
+Suppose we observe data $X_1,...,X_n$ from some distribution with parameter $\theta \in \mathbb{R}^q$, and we wish to test
+
+$$H_0: \theta = \theta_0 \hspace{1cm} H_A: \theta \neq \theta_0$$
+
+Consider three possible scenarios:
+
+* $H_0$ is true: $\theta =$
+* $H_A$ is true, **fixed** alternative: $\theta =$
+* $H_A$ is true, **local** alternative: $\theta =$
+
+\vspace{3cm}
+
+## Comparing Wald and LRT statistics
+
+Under $H_0$, or for a local alternative $\theta = \theta_0 + \frac{d}{\sqrt{n}}$, Wald and LRT are asymptotically equivalent as $n \to \infty$ (under certain regularity conditions).
+
+\vspace{6cm}
+
+## Power under a local alternative
+
+Recall asymptotic normality of the MLE: $\widehat{\theta} \approx N(\theta, \mathcal{I}^{-1}(\theta))$
+
+Suppose we test $H_0: \theta = \theta_0$ vs. $H_A: \theta \neq \theta_0$.
+
+$$W = \hspace{3cm}$$
+Under $H_0$, $W \approx \chi^2_q$
+
+\vspace{4cm}
+
+## Class activity
+
+* Simulate data under a local alternative
+* Verify that the Wald statistic follows a non-central $\chi^2$ distribution
+
+
+
