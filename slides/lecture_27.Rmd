@@ -1,0 +1,74 @@
+---
+title: "Lecture 27: Interval estimation"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Motivation
+
+Suppose we have data $(X_1, Y_1),...,(X_n, Y_n)$ with
+$$Y_i \sim Bernoulli(p_i)$$
+$$\log \left( \dfrac{p_i}{1 - p_i} \right) = \beta^T X_i$$
+
+So far, we have discussed:
+
+* Finding point estimates $\widehat{\beta}$
+* Testing hypotheses about the true (but unknown) parameters $\beta$
+
+**Question:** What are the limitations of point estimates and hypothesis tests for inference about $\beta$?
+
+## Confidence interval
+
+```{r, include=F}
+dengue <- read.csv("https://sta712-f22.github.io/homework/dengue.csv")
+```
+
+```{r, echo=F}
+m1 <- glm(Dengue ~ WBC + PLT, data = dengue, 
+          family = binomial)
+summary(m1)$coefficients
+```
+
+**Question:** How would I calculate a 95% confidence interval for $\beta_1$ (the change in the log odds of dengue for a one-unit increase in WBC, holding PLT fixed)?
+
+\vspace{4cm}
+
+## Confidence interval
+
+```{r, echo=F}
+m1 <- glm(Dengue ~ WBC + PLT, data = dengue, 
+          family = binomial)
+summary(m1)$coefficients
+```
+
+95% confidence interval for $\beta_1$: (-0.315, -0.262)
+
+**Question:** How do I interpret this confidence interval?
+
+\vspace{4cm}
+
+
+## Deriving the coverage probability
+
+$$(1 - \alpha) \text{ Wald interval}: \widehat{\theta} \pm z_{\alpha/2} SE(\widehat{\theta})$$
+
+\vspace{6cm}
+
+## Formal definition
+
+## Inverting a test
+
+**Theorem:** Let $\theta \in \Theta$ be a parameter of interest. For each value of $\theta_0 \in \Theta$, consider testing $H_0: \theta = \theta_0$ vs. $H_A: \theta \neq \theta_0$, and let $\mathcal{R}(\theta_0)$ be the rejection region for a level $\alpha$ test. Let $C(X_1,...,X_n) = \{\theta_0 \in \Theta: (X_1,...,X_n) \not \in \mathcal{R}(\theta_0) \}$. Then $C(X_1,...,X_n)$ is a $1 - \alpha$ confidence set for $\theta$.
+
+\vspace{4cm}
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Uniform[0, \theta]$. Let's invert the LRT to find a confidence interval for $\theta$.
+
+\vspace{6cm}
+
+
+
+
+
