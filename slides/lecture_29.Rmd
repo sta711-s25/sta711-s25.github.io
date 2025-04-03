@@ -1,0 +1,111 @@
+---
+title: "Lecture 29: Delta method and variance stabilizing transformations"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Motivating example: Exponential confidence interval
+
+$$X_1,...,X_n \overset{iid}{\sim} Exponential(\theta)$$
+
+**Last time:** Used a pivotal quantity to find $1 - \alpha$ CI for $\theta$:
+
+$$\left[ \frac{a}{\sum_i X_i}, \frac{b}{\sum_i X_i} \right]$$
+
+**Alternative:** Wald Confidence interval
+
+* MLE: $\widehat{\theta} =$
+
+\bigskip
+
+* Asymptotic distribution: $\sqrt{n}(\widehat{\theta} - \theta) \approx$
+
+\bigskip
+
+* Wald CI:
+
+\vspace{2cm}
+
+## Motivating example: non-constant variance
+
+**Example:** Data on the number of hospitals and number of doctors (MDs) in US counties
+
+```{r echo=F, message=F, warning=F, fig.width=3.5, fig.height=2.5}
+library(tidyverse)
+library(Stat2Data)
+data("CountyHealth")
+
+CountyHealth |>
+  ggplot(aes(x = Hospitals, y = MDs)) +
+  geom_point(size=1) +
+  theme_bw()
+```
+
+**Question:** How do we adjust for non-constant variance in a linear model?
+
+## Motivating example: non-constant variance
+
+**Example:** Data on the number of hospitals and number of doctors (MDs) in US counties
+
+```{r echo=F, message=F, warning=F, fig.width=3.5, fig.height=2.5}
+CountyHealth |>
+  ggplot(aes(x = Hospitals, y = sqrt(MDs))) +
+  geom_point(size=1) +
+  theme_bw()
+```
+
+## Goal: variance stabilizing transformation
+
+Suppose $\widehat{\theta}$ is an estimator, and $Var(\widehat{\theta})$ depends on $\theta$. Examples:
+
+* Exponential: $\sqrt{n}(\widehat{\theta} - \theta) \approx N(0, \theta^2)$
+
+\bigskip
+
+* Poisson: $\sqrt{n}(\widehat{\lambda} - \lambda) \approx N(0, \lambda)$
+
+\bigskip
+
+* Bernoulli: $\sqrt{n}(\widehat{p} - p) \approx N(0, p(1-p))$
+
+\bigskip
+
+**Goal:** Find a transformation $g$ such that $Var(g(\widehat{\theta}))$ does **not** depend on $\theta$
+
+## Delta method
+
+## Delta method
+
+Suppose that $\widehat{\theta}$ is an estimate of $\theta \in \mathbb{R}$, such that 
+
+$$\sqrt{n}(\widehat{\theta} - \theta) \overset{d}{\to} N(0, \sigma^2)$$
+
+for some $\sigma^2$, and $g$ is a continuously differentiable function with $g'(\theta) \neq 0$. Then
+
+$$\sqrt{n}(g(\widehat{\theta}) - g(\theta)) \overset{d}{\to} N(0, \sigma^2[g'(\theta)]^2)$$
+
+\vspace{3cm}
+
+## Example: Exponential
+
+$$\sqrt{n}(\widehat{\theta} - \theta) \approx N(0, \theta^2)$$
+
+\vspace{5cm}
+
+## Example: Poisson
+
+$$\sqrt{n}(\widehat{\lambda} - \lambda) \approx N(0, \lambda)$$
+
+\vspace{5cm}
+
+## Example: Bernoulli
+
+$$\sqrt{n}(\widehat{p} - p) \approx N(0, p(1-p))$$
+
+\vspace{5cm}
+
+
+
+
+
+
