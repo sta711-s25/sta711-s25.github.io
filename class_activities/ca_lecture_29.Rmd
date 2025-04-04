@@ -48,7 +48,7 @@ Conduct a simulation study to compare the two different confidence intervals for
 
 **Original Wald interval:** (without the variance stabilizing transformation)
 
-$$\left( \widehat{\lambda} - z_{\alpha/2} \frac{\sqrt{\lambda}}{\sqrt{n}}, \ \widehat{\lambda} + z_{\alpha/2} \frac{\sqrt{\lambda}}{\sqrt{n}} \right)$$
+$$\left( \widehat{\lambda} - z_{\alpha/2} \frac{\sqrt{\widehat{\lambda}}}{\sqrt{n}}, \ \widehat{\lambda} + z_{\alpha/2} \frac{\sqrt{\widehat{\lambda}}}{\sqrt{n}} \right)$$
 
 **Delta method:** (the variance stabilizing transformation)
 
