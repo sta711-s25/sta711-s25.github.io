@@ -1,0 +1,64 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Variance stabilizing transformations and the delta method
+
+**Delta method:**
+
+Suppose that $\widehat{\theta}$ is an estimate of $\theta \in \mathbb{R}$, such that 
+
+$$\sqrt{n}(\widehat{\theta} - \theta) \overset{d}{\to} N(0, \sigma^2)$$
+
+for some $\sigma^2$, and $g$ is a continuously differentiable function with $g'(\theta) \neq 0$. Then
+
+$$\sqrt{n}(g(\widehat{\theta}) - g(\theta)) \overset{d}{\to} N(0, \sigma^2[g'(\theta)]^2)$$
+
+The delta method is often used to find a **variance stabilizing transformation**. For example, suppose that we sample $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$. Then 
+
+$$\widehat{\lambda} = \overline{X}$$
+
+and 
+
+$$\sqrt{n}(\widehat{\lambda} - \lambda) \overset{d}{\to} N(0, \lambda)$$
+
+The variance of $\widehat{\lambda}$ clearly depends on $\lambda$. To remove this dependence on $\lambda$, we find a variance stabilizing transformation $g$ such that
+
+$$\lambda [g'(\lambda)]^2 \hspace{0.2cm} \text{ is constant}$$
+
+This means that we need $g'(\lambda) \propto \lambda^{-1/2}$, which means $g(\lambda) \propto \sqrt{\lambda}$. Then, applying delta method,
+
+$$\sqrt{n}(\sqrt{\widehat{\lambda}} - \sqrt{\lambda}) \overset{d}{\to} N\left(0, \frac{1}{4}\right)$$
+
+This means that a $1 - \alpha$ Wald interval for $\sqrt{\lambda}$ is
+
+$$\sqrt{\widehat{\lambda}} \ \pm z_{\alpha/2} \frac{1}{2\sqrt{n}}$$
+To get a confidence interval for $\lambda$, simply transform the endpoints:
+
+$$\left(\left(\sqrt{\widehat{\lambda}} \ - z_{\alpha/2} \frac{1}{2\sqrt{n}} \right)^2, \ \left(\sqrt{\widehat{\lambda}} \ + z_{\alpha/2} \frac{1}{2\sqrt{n}} \right)^2 \right)$$
+
+## Questions
+
+Conduct a simulation study to compare the two different confidence intervals for $\lambda$ (with and without the variance stabilizing transformation):
+
+**Original Wald interval:** (without the variance stabilizing transformation)
+
+$$\left( \widehat{\lambda} - z_{\alpha/2} \frac{\sqrt{\lambda}}{\sqrt{n}}, \ \widehat{\lambda} + z_{\alpha/2} \frac{\sqrt{\lambda}}{\sqrt{n}} \right)$$
+
+**Delta method:** (the variance stabilizing transformation)
+
+$$\left(\left(\sqrt{\widehat{\lambda}} \ - z_{\alpha/2} \frac{1}{2\sqrt{n}} \right)^2, \ \left(\sqrt{\widehat{\lambda}} \ + z_{\alpha/2} \frac{1}{2\sqrt{n}} \right)^2 \right)$$
+
+* Using $n = 100$ samples, sample $X_1,...,X_n \overset{iid}{\sim} Poisson(2)$
+* Construct both intervals and check whether $\lambda = 2$ is contained in the two intervals
+* Repeat many times and report the coverage probability for each interval
+
+
+
+
+

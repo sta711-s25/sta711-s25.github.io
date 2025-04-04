@@ -16,3 +16,4 @@ April 2
 
 April 4
 : Variance stabilizing transformations
+  : [Slides](https://sta711-s25.github.io/slides/lecture_29.pdf), [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_29.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_29_solutions.html)

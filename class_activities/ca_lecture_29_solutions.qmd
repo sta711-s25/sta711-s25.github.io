@@ -1,0 +1,31 @@
+---
+title: "Class activity solutions"
+format: html
+---
+
+```{r}
+nsim <- 10000
+n <- 100
+lambda <- 2
+
+lower_1 <- rep(NA, nsim)
+upper_1 <- rep(NA, nsim)
+lower_2 <- rep(NA, nsim)
+upper_2 <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- rpois(n, 2)
+  
+  lower_1[i] <- mean(x) - 1.96*sqrt(mean(x))/sqrt(n)
+  upper_1[i] <- mean(x) + 1.96*sqrt(mean(x))/sqrt(n)
+  
+  lower_2[i] <- (sqrt(mean(x)) - 1.96*0.5/sqrt(n))^2
+  upper_2[i] <- (sqrt(mean(x)) + 1.96*0.5/sqrt(n))^2
+}
+
+mean(lower_1 < lambda & lambda < upper_1)
+mean(lower_2 < lambda & lambda < upper_2)
+
+
+```
+

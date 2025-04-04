@@ -105,7 +105,11 @@ $$\sqrt{n}(\widehat{p} - p) \approx N(0, p(1-p))$$
 \vspace{5cm}
 
 
+## Activity
 
+Verify in simulations that a variance stabilizing transformation works (produces intervals with the desired coverage):
+
+[https://sta711-s25.github.io/class_activities/ca_lecture_29.html](https://sta711-s25.github.io/class_activities/ca_lecture_29.html)
 
 
 
