@@ -1,0 +1,59 @@
+---
+title: "Lecture 31: Comparing estimators"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Recap: MSE
+
+Let $\widehat{\theta}$ be an estimator of $\theta$. The **mean squared error** (MSE) of $\widehat{\theta}$ is 
+
+$$MSE(\widehat{\theta}) = \mathbb{E}_\theta[(\widehat{\theta} - \theta)^2] = Var(\widehat{\theta}) + Bias^2(\widehat{\theta})$$
+
+\vspace{4cm}
+
+## MSE and consistent estimators
+
+## MSE example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$. Consider two estimates of $\sigma^2$:
+$$\widehat{\sigma}^2 = \frac{1}{n} \sum \limits_{i=1}^n (X_i - \overline{X})^2 \hspace{1cm} s^2 = \frac{1}{n-1} \sum \limits_{i=1}^n (X_i - \overline{X})^2$$
+
+**Activity:** Compute the MSE for $\widehat{\sigma}^2$ and $s^2$ (see handout).
+
+\vspace{4cm}
+
+## Best unbiased estimators
+
+Suppose we restrict ourselves to **unbiased** estimators.
+
+**Definition** (best unbiased estimator):
+
+\vspace{6cm}
+
+## Cramer-Rao lower bound
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$
+
+\vspace{6cm}
+
+## Why MLEs are nice
+
+Let $\theta$ be a parameter of interest, and $\widehat{\theta}$ be the maximum likelihood estimator from a sample of size $n$. Under regularity conditions, $\widehat{\theta}$ satisfies the following properties:
+
+* $\widehat{\theta} \overset{p}{\to} \theta$
+
+\bigskip
+
+* $\sqrt{n}(\widehat{\theta} - \theta) \overset{d}{\to} N(0, \mathcal{I}_1^{-1}(\theta))$
+
+\vspace{4cm}
+
+
+
+
+
+
+

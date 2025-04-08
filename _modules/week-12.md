@@ -9,7 +9,8 @@ April 7
 : Casella and Berger 7.2, 7.3, 10.1
       
 April 9
-: Comparing estimators
+: Comparing estimators, CRLB
+  : [Slides](https://sta711-s25.github.io/slides/lecture_31.pdf), [handout](https://sta711-s25.github.io/class_activities/ca_lecture_31.pdf)
   
 : Casella and Berger 7.2, 7.3, 10.1
 
