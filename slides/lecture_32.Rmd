@@ -1,0 +1,66 @@
+---
+title: "Lecture 32: Variance and unbiased estimators"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Best unbiased estimators
+
+Suppose we restrict ourselves to **unbiased** estimators.
+
+**Definition** (best unbiased estimator):
+
+\vspace{6cm}
+
+## Cramer-Rao lower bound
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$
+
+\vspace{6cm}
+
+## Example
+
+Suppose that $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$.
+
+\vspace{6cm}
+
+## Why MLEs are nice
+
+Let $\theta$ be a parameter of interest, and $\widehat{\theta}$ be the maximum likelihood estimator from a sample of size $n$. Under regularity conditions, $\widehat{\theta}$ satisfies the following properties:
+
+* $\widehat{\theta} \overset{p}{\to} \theta$
+
+\bigskip
+
+* $\sqrt{n}(\widehat{\theta} - \theta) \overset{d}{\to} N(0, \mathcal{I}_1^{-1}(\theta))$
+
+\vspace{4cm}
+
+
+## Sufficient statistics
+
+**Question:** Given an unbiased estimator, can I improve its variance?
+
+* Answering this requires us to introduce a new concept: sufficient statistics
+
+**Definition** (sufficient statistic):
+
+\vspace{4cm}
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$
+
+\vspace{6cm}
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Bernoulli(p)$
+
+\vspace{6cm}
+
+
+
+

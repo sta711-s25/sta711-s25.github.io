@@ -16,5 +16,6 @@ April 9
 
 April 11
 : Cramer-Rao lower bound
+  : [Slides](https://sta711-s25.github.io/slides/lecture_32.pdf)
 
 : Casella and Berger 7.3.1, 7.3.2
