@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{bbm}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+STA 711 Homework 8\\
+\normalsize
+\vspace{5mm}
+\end{center}
+\noindent \textbf{Due:} Monday, April 21, 10:00pm on Canvas.\\ 
+
+\noindent \textbf{Instructions:} Submit your work as a single PDF. You may choose to either hand-write your work and submit a PDF scan, or type your work using LaTeX and submit the resulting PDF. See the course website for a \href{https://sta711-s25.github.io/homework/hw_template.tex}{homework template file} and \href{https://sta711-s25.github.io/homework/latex_instructions/}{instructions} on getting started with LaTeX and Overleaf.
+
+\section*{Confidence intervals}
+
+
+\begin{enumerate}
+
+\item Suppose $X_1,...,X_n \overset{iid}{\sim} N(\theta, \theta)$, where $\theta > 0$. Find a pivotal quantity $Q(X_1,...,X_n, \theta)$, and use the quantity to create a $1 - \alpha$ confidence interval for $\theta$.
+
+\item Suppose $X_1 \overset{iid}{\sim} Uniform[\theta - \frac{1}{2}, \theta + \frac{1}{2}]$. Find a $1 - \alpha$ confidence interval for $\theta$, using the single observation $X_1$.
+
+\item Suppose that $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$. 
+
+\begin{enumerate}
+\item If $\sigma^2$ is known, the interval for $\mu$ is $\overline{X} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}}$, and the \textit{width} of the interval is $2z_{\alpha/2} \frac{\sigma}{\sqrt{n}}$. Find the minimum value of $n$ so that a 95\% confidence interval for $\mu$ will have a length of at most $\sigma/4$.
+
+\item If $\sigma^2$ is unknown, the interval for $\mu$ is $\overline{X} \pm t_{n-1, \alpha/2} \frac{s}{\sqrt{n}}$, where $s^2 = \frac{1}{n-1} \sum \limits_{i=1}^n (X_i - \overline{X})^2$. Find the minimum value of $n$ such that, with probability 0.9, a 95\% confidence interval for $\mu$ will have a length of at most $\sigma/4$.
+\end{enumerate}
+
+\item Let $X_1,...,X_n$ be an iid sample from the \textit{inverse Gaussian} distribution, with pdf
+$$f(x|\mu) = \frac{1}{\sqrt{2 \pi x^3}} \exp \left\lbrace - \frac{(x - \mu)^2}{2 \mu^2 x} \right\rbrace \hspace{1cm} x > 0, \mu > 0.$$
+On Exam 2, you showed that $\sqrt{n}(\overline{X} - \mu) \overset{d}{\to} N(0, \mu^3)$.\\
+
+Using delta method, find a variance stabilizing transformation $g$ such that the (asymptotic) variance of $g(\overline{X})$ does not depend on $\mu$.
+
+\end{enumerate}
+
+\section*{Sufficient statistics and minimal sufficiency}
+
+In class, we discussed \textit{sufficient statistics}. Informally, a sufficient statistic captures all the information about a parameter of interest. In that sense, a sufficient statistic is a form of data reduction. However, there are many different possible sufficient statistics, and we might ask which reduction is the ``most efficient''.\\
+
+\noindent A \textbf{minimal sufficient statistic} $T(X_1,...,X_n)$ is one which achieves the greatest possible data reduction. That is, if $T'(X_1,...,X_n)$ is another sufficient statistic, then $T(X_1,...,X_n)$ is a function of $T'(X_1,...,X_n)$ (see definition 6.2.11 in Casella and Berger).\\
+
+\noindent Theorem 6.2.13 in Casella and Berger tells us how to find a minimal sufficient statistic. Let $f(x_1,...,x_n | \theta)$ be the joint probability function, and suppose that the ratio $f(x_1,...,x_n | \theta) / f(y_1,...,y_n | \theta)$ does not depend on $\theta$ if and only if $T(x_1,...,x_n) = T(y_1,...,y_n)$. Then, $T$ is a minimal sufficient statistic.\\
+
+\noindent In the following questions, you will practice finding minimal sufficient statistics. I recommend reading section 6.2.1, including the definition and theorem mentioned here and examples 6.2.14 and 6.2.15.
+
+\begin{enumerate}
+\item[5.] Suppose that $X_1,...,X_n \overset{iid}{\sim} Geometric(p)$. Using the information above, find a minimal sufficient statistic for $p$.
+
+\item[6.] Suppose that $X_1,...,X_n \overset{iid}{\sim} Uniform(a,b)$. Find a minimal sufficient statistic for $(a,b)$. \textit{Hint:} Like in the normal example in class and in 6.2.14, your minimal sufficient statistic will be a vector.
+\end{enumerate}
+
+\end{document}
