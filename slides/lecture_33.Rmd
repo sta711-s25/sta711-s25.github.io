@@ -1,0 +1,40 @@
+---
+title: "Lecture 33: Sufficiency and Rao-Blackwell"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Sufficient statistics
+
+**Question:** Given an unbiased estimator, can I improve its variance?
+
+* Answering this requires us to introduce a new concept: sufficient statistics
+
+**Definition** (sufficient statistic):
+
+\vspace{4cm}
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$
+
+\vspace{6cm}
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Bernoulli(p)$
+
+\vspace{6cm}
+
+## Rao-Blackwell
+
+## Example
+
+Suppose $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$
+
+\vspace{6cm}
+
+## Factorization theorem
+
+
+
