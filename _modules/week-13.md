@@ -11,7 +11,7 @@ April 14
       
 April 16
 : MLE under mis-specification, sandwich variance
-  : [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_34.html)
+  : [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_34.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_34_solutions.html)
 
 April 18
 : MLE under mis-specification
