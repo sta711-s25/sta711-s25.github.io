@@ -11,6 +11,7 @@ April 14
       
 April 16
 : MLE under mis-specification
+  : [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_34.html)
 
 April 18
 : MLE under mis-specification

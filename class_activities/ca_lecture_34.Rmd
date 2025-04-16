@@ -1,0 +1,159 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Parameter estimation with a mis-specified model
+
+## Poisson regression with over-dispersed data
+
+Suppose we assume that
+
+$$Y_i \sim Poisson(\mu_i) \hspace{1cm} \log(\mu_i) = \beta_0 + \beta_1 X_i$$
+Furthermore, we want to test $H_0: \beta_1 = 0$ vs. $H_A: \beta_1 \neq 0$.
+
+However, suppose that we are **wrong** about the distribution of $Y_i$; we thought it was Poisson, but it is really Negative Binomial! This is a problem; our model is built on the assumption that the response is Poisson, which impacts both our estimates (found via maximum likelihood estimation with the Poisson distribution) and our assumed variance of the estimates.
+
+Note that even though we have mis-specified our response distribution, the null hypothesis can still be true if there really is no relationship between $X$ and $Y$. So, we can still test $\beta_1 = 0$ if we want to test for a relationship between $X$ and $Y$. However, we need to think about what the consequences for our type I error rate will be.
+
+The code below simulates negative binomial data with an unrelated explanatory variable, calculates the estimated slope $\widehat{\beta}_1$ and the model-estimated standard error $SE(\widehat{\beta}_1)$, and tests $H_0: \beta_1 = 0$ for a Poisson regression model (calculates the p-value):
+
+```{r}
+n <- 500
+
+x <- rnorm(n)
+mu <- exp(4 + 0*x)
+y <- rnbinom(n, size=10, mu=mu)
+
+m1 <- glm(y ~ x, family = poisson)
+
+# estimated slope
+
+beta1_est <- summary(m1)$coefficients[2,1]
+
+# estimated standard error from the model
+
+se_est <- summary(m1)$coefficients[2,2]
+
+# p-value
+pval_naive <- summary(m1)$coefficients[2,4]
+```
+
+
+:::{.question}
+#### Question 1
+
+Repeat the code many times. If you reject when $p < 0.05$, what is your type I error rate? Are you controlling the type I error rate at the desired level ($\alpha = 0.05$)?
+:::
+
+:::{.question}
+#### Question 2
+
+Using your many repetitions, approximate the true mean and standard deviation of $\widehat{\beta}_1$. Compare the standard deviation of $\widehat{\beta}_1$ to the *estimated* standard deviations from the Poisson regression models. What is causing the inflated type I error rate you saw in question 1?
+:::
+
+## Correcting the variance
+
+The issue with our Poisson regression model is that the true variance of $\widehat{\beta}_1$ is **greater** than the variance assumed by the model. The Poisson regression model assumes that
+
+$$Var(\widehat{\beta}) \approx ({\bf X}^T {\bf W} {\bf X})^{-1},$$
+where ${\bf W} = \text{diag}(\mu_i)$. This comes from the fact that if the data truly *were* Poisson, the mean and variance would be the same.
+
+However, the data aren't Poisson! Instead, we need to *estimate* $Var(\widehat{\beta})$ in a way that avoids the Poisson assumption. This can be done with something called a **sandwich** variance estimate. 
+
+We will talk about how the sandwich variance is constructed soon. But first, let's check that it works. The code below uses the `sandwich` package to compute the sandwich variance-covariance matrix, and construct a test statistic using the sandwich variance instead of the variance assumed by the Poisson model.
+
+```{r}
+library(sandwich)
+
+# original variance-covariance matrix from the glm function
+vcov(m1)
+
+# sandwich variance-covariance matrix
+sandwich_mat <- sandwich(m1)
+sandwich_mat
+
+# z-test statistic from the original glm output
+summary(m1)$coefficients[2,3]
+
+# z-test statistic using the sandwich variance
+test_stat_sandwich <- m1$coefficients[2]/sqrt(sandwich_mat[2,2])
+test_stat_sandwich
+
+# p-value from the original glm output
+summary(m1)$coefficients[2,4]
+
+# p-value using the sandwich variance
+2*pnorm(abs(test_stat_sandwich), lower.tail=F)
+```
+
+:::{.question}
+#### Question 3
+
+Compare the results (variance-covariance matrix, z-statistic, p-value) between the original GLM output and the sandwich estimator. How do the results change when we use the sandwich variance?
+:::
+
+:::{.question}
+#### Question 4
+
+Like in question 1, repeat the simulation many times, this time using the sandwich variance. What is the type I error rate now? Are you controlling the type I error rate at the desired level ($\alpha = 0.05$)?
+:::
+
+
+## What is the sandwich variance?
+
+The estimated sandwich matrix is
+
+$$\widehat{{\bf S}}_n = \widehat{{\bf J}}_n^{-1} \widehat{{\bf V}}_n \widehat{{\bf J}}_n^{-1}$$
+where $\widehat{{\bf J}}_n = \dfrac{{\bf X}^T \widehat{{\bf W}} {\bf X}}{\phi^2}$ and $\widehat{{\bf V}}_n = \sum \limits_{i=1}^n (Y_i - \widehat{\mu}_i)^2 X_i X_i^T = {\bf X}^T \text{diag}((Y_i - \widehat{\mu}_i)^2) {\bf X}$.
+
+For Poisson regression, for example, $\widehat{{\bf V}}_n = {\bf X}^T \text{diag}((Y_i - \widehat{\mu}_i)^2) {\bf X}$ and $\widehat{{\bf J}}_n = {\bf X}^T \text{diag}(\widehat{\mu}_i) {\bf X}$
+
+
+:::{.question}
+#### Question 5
+
+Use the definition of the sandwich variance estimate above to calculate $\widehat{{\bf S}}_n$ for the simulated data. Recall that `m1$fitted.values` extracts the $\widehat{\mu}_i$ from the fitted model, and `model.matrix(m1)` creates the design matrix ${\bf X}$.
+:::
+
+:::{.question}
+#### Question 6
+
+Verify the results in question 5 agree with the matrix computed by the `sandwich` package in R.
+
+:::
+
+
+## More model mis-specification
+
+Now suppose that we observe $(X_i, Y_i)$ with $X_i \sim N(0, 0.25)$, $Y_i \sim Poisson(\mu_i)$, and 
+
+$$\log(\mu_i) = -1 + 0.2 X_i^3$$
+**However**, we incorrectly fit a Poisson model with $\log(\mu_i) = \beta_0 + \beta_1 X_i$ (i.e., our shape assumption is incorrect, even though we got the distribution right).
+
+The code below simulates data from this true distribution, and fits the incorrectly-specified model:
+
+```{r}
+n <- 500
+x <- rnorm(n, sd=0.5)
+
+# true relationship (cubic)
+lambda <- exp(-1 + 0.2*x^3)
+y <- rpois(n, lambda)
+
+# fitted model (incorrect shape assumption)
+m1 <- glm(y ~ x, family = poisson)
+```
+
+
+:::{.question}
+#### Question 7
+
+For the model above, run the simulation many times to approximate $\mathbb{E}[\widehat{\beta}_1]$. How does it compare with 0.2?
+
+:::
+
