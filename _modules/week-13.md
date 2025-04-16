@@ -10,7 +10,7 @@ April 14
   : [HW 8](https://sta711-s25.github.io/homework/HW8.pdf)
       
 April 16
-: MLE under mis-specification
+: MLE under mis-specification, sandwich variance
   : [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_34.html)
 
 April 18
