@@ -1765,29 +1765,29 @@ model.</p>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co"># original variance-covariance matrix from the glm function</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">vcov</span>(m1)</span></code></pre></div>
 <pre><code>##              (Intercept)            x
-## (Intercept) 3.651805e-05 2.670833e-06
-## x           2.670833e-06 3.726239e-05</code></pre>
+## (Intercept) 3.640914e-05 1.129209e-06
+## x           1.129209e-06 3.645841e-05</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># sandwich variance-covariance matrix</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>sandwich_mat <span class="ot">&lt;-</span> <span class="fu">sandwich</span>(m1)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>sandwich_mat</span></code></pre></div>
-<pre><code>##               (Intercept)             x
-## (Intercept)  2.181951e-04 -4.901950e-06
-## x           -4.901950e-06  2.192488e-04</code></pre>
+<pre><code>##              (Intercept)            x
+## (Intercept) 2.375310e-04 1.451853e-05
+## x           1.451853e-05 2.276572e-04</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># z-test statistic from the original glm output</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">summary</span>(m1)<span class="sc">$</span>coefficients[<span class="dv">2</span>,<span class="dv">3</span>]</span></code></pre></div>
-<pre><code>## [1] -4.794966</code></pre>
+<pre><code>## [1] 0.3435854</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># z-test statistic using the sandwich variance</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>test_stat_sandwich <span class="ot">&lt;-</span> m1<span class="sc">$</span>coefficients[<span class="dv">2</span>]<span class="sc">/</span><span class="fu">sqrt</span>(sandwich_mat[<span class="dv">2</span>,<span class="dv">2</span>])</span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>test_stat_sandwich</span></code></pre></div>
 <pre><code>##         x 
-## -1.976752</code></pre>
+## 0.1374969</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># p-value from the original glm output</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">summary</span>(m1)<span class="sc">$</span>coefficients[<span class="dv">2</span>,<span class="dv">4</span>]</span></code></pre></div>
-<pre><code>## [1] 1.627021e-06</code></pre>
+<pre><code>## [1] 0.7311581</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># p-value using the sandwich variance</span></span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="dv">2</span><span class="sc">*</span><span class="fu">pnorm</span>(<span class="fu">abs</span>(test_stat_sandwich), <span class="at">lower.tail=</span>F)</span></code></pre></div>
-<pre><code>##          x 
-## 0.04806964</code></pre>
+<pre><code>##         x 
+## 0.8906381</code></pre>
 <div id="question-3" class="section level4 question">
 <h4>Question 3</h4>
 <p>Compare the results (variance-covariance matrix, z-statistic,
@@ -1804,19 +1804,19 @@ controlling the type I error rate at the desired level (<span class="math inline
 <div id="what-is-the-sandwich-variance" class="section level2">
 <h2>What is the sandwich variance?</h2>
 <p>The estimated sandwich matrix is</p>
-<p><span class="math display">\[\widehat{{\bf S}}_n = \widehat{{\bf
-J}}_n^{-1} \widehat{{\bf V}}_n \widehat{{\bf J}}_n^{-1}\]</span> where
-<span class="math inline">\(\widehat{{\bf J}}_n = \dfrac{{\bf X}^T
-\widehat{{\bf W}} {\bf X}}{\phi^2}\)</span> and <span class="math inline">\(\widehat{{\bf V}}_n = \sum \limits_{i=1}^n (Y_i -
-\widehat{\mu}_i)^2 X_i X_i^T = {\bf X}^T \text{diag}((Y_i -
+<p><span class="math display">\[\widehat{ {\bf S} }_n = \widehat{ {\bf
+J} }_n^{-1} \widehat{ {\bf V} }_n \widehat{ {\bf J} }_n^{-1}\]</span>
+where <span class="math inline">\(\widehat{ {\bf J} }_n = \dfrac{ {\bf
+X}^T \widehat{ {\bf W} } {\bf X} }{\phi^2}\)</span> and <span class="math inline">\(\widehat{ {\bf V} }_n = \sum \limits_{i=1}^n (Y_i
+- \widehat{\mu}_i)^2 X_i X_i^T = {\bf X}^T \text{diag}((Y_i -
 \widehat{\mu}_i)^2) {\bf X}\)</span>.</p>
-<p>For Poisson regression, for example, <span class="math inline">\(\widehat{{\bf V}}_n = {\bf X}^T \text{diag}((Y_i -
-\widehat{\mu}_i)^2) {\bf X}\)</span> and <span class="math inline">\(\widehat{{\bf J}}_n = {\bf X}^T
+<p>For Poisson regression, for example, <span class="math inline">\(\widehat{ {\bf V} }_n = {\bf X}^T \text{diag}((Y_i
+- \widehat{\mu}_i)^2) {\bf X}\)</span> and <span class="math inline">\(\widehat{ {\bf J} }_n = {\bf X}^T
 \text{diag}(\widehat{\mu}_i) {\bf X}\)</span></p>
 <div id="question-5" class="section level4 question">
 <h4>Question 5</h4>
 <p>Use the definition of the sandwich variance estimate above to
-calculate <span class="math inline">\(\widehat{{\bf S}}_n\)</span> for
+calculate <span class="math inline">\(\widehat{ {\bf S} }_n\)</span> for
 the simulated data. Recall that <code>m1$fitted.values</code> extracts
 the <span class="math inline">\(\widehat{\mu}_i\)</span> from the fitted
 model, and <code>model.matrix(m1)</code> creates the design matrix <span class="math inline">\({\bf X}\)</span>.</p>

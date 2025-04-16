@@ -108,16 +108,16 @@ Like in question 1, repeat the simulation many times, this time using the sandwi
 
 The estimated sandwich matrix is
 
-$$\widehat{{\bf S}}_n = \widehat{{\bf J}}_n^{-1} \widehat{{\bf V}}_n \widehat{{\bf J}}_n^{-1}$$
-where $\widehat{{\bf J}}_n = \dfrac{{\bf X}^T \widehat{{\bf W}} {\bf X}}{\phi^2}$ and $\widehat{{\bf V}}_n = \sum \limits_{i=1}^n (Y_i - \widehat{\mu}_i)^2 X_i X_i^T = {\bf X}^T \text{diag}((Y_i - \widehat{\mu}_i)^2) {\bf X}$.
+$$\widehat{ {\bf S} }_n = \widehat{ {\bf J} }_n^{-1} \widehat{ {\bf V} }_n \widehat{ {\bf J} }_n^{-1}$$
+where $\widehat{ {\bf J} }_n = \dfrac{ {\bf X}^T \widehat{ {\bf W} } {\bf X} }{\phi^2}$ and $\widehat{ {\bf V} }_n = \sum \limits_{i=1}^n (Y_i - \widehat{\mu}_i)^2 X_i X_i^T = {\bf X}^T \text{diag}((Y_i - \widehat{\mu}_i)^2) {\bf X}$.
 
-For Poisson regression, for example, $\widehat{{\bf V}}_n = {\bf X}^T \text{diag}((Y_i - \widehat{\mu}_i)^2) {\bf X}$ and $\widehat{{\bf J}}_n = {\bf X}^T \text{diag}(\widehat{\mu}_i) {\bf X}$
+For Poisson regression, for example, $\widehat{ {\bf V} }_n = {\bf X}^T \text{diag}((Y_i - \widehat{\mu}_i)^2) {\bf X}$ and $\widehat{ {\bf J} }_n = {\bf X}^T \text{diag}(\widehat{\mu}_i) {\bf X}$
 
 
 :::{.question}
 #### Question 5
 
-Use the definition of the sandwich variance estimate above to calculate $\widehat{{\bf S}}_n$ for the simulated data. Recall that `m1$fitted.values` extracts the $\widehat{\mu}_i$ from the fitted model, and `model.matrix(m1)` creates the design matrix ${\bf X}$.
+Use the definition of the sandwich variance estimate above to calculate $\widehat{ {\bf S} }_n$ for the simulated data. Recall that `m1$fitted.values` extracts the $\widehat{\mu}_i$ from the fitted model, and `model.matrix(m1)` creates the design matrix ${\bf X}$.
 :::
 
 :::{.question}
