@@ -15,3 +15,4 @@ April 16
 
 April 18
 : MLE under mis-specification
+  : [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_35.html)

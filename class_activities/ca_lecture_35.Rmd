@@ -1,0 +1,85 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Parameter estimation with a mis-specified model
+
+Suppose that we observe $(X_i, Y_i)$ with $X_i \sim N(0, 0.25)$, $Y_i \sim Poisson(\mu_i)$, and 
+
+$$\log(\mu_i) = -1 + 0.2 X_i^3$$
+**However**, we incorrectly fit a Poisson model with $\log(\mu_i) = \beta_0 + \beta_1 X_i$ (i.e., our shape assumption is incorrect, even though we got the distribution right).
+
+The code below simulates data from this true distribution, and fits the incorrectly-specified model:
+
+```{r}
+n <- 500
+x <- rnorm(n, sd=0.5)
+
+# true relationship (cubic)
+lambda <- exp(-1 + 0.2*x^3)
+y <- rpois(n, lambda)
+
+# fitted model (incorrect shape assumption)
+m1 <- glm(y ~ x, family = poisson)
+```
+
+As $n \to \infty$, we know that $\beta \overset{p}{\to} \beta^*$, and in the previous activity we estimated $\beta_1^*$ (which was approximately 0.155).
+
+To verify that $\widehat{\beta} \approx N(\beta^*, {\bf S}_n)$, where ${\bf S}_n$ is the sandwich variance, we will show that confidence intervals constructed with the sandwich variance have the desired coverage for $\beta^*$.
+
+The code below simulates data as described above, and calculates a 95% CI for $\beta_1^*$ using the sandwich variance estimate.
+
+```{r, eval=F}
+n <- 500
+
+x <- rnorm(n, sd=0.5)
+lambda <- exp(-1 + 0.2*x^3)
+y <- rpois(n, lambda)
+
+m1 <- glm(y ~ x, family = poisson)
+cov_mat <- sandwich(m1)
+
+upper <- m1$coefficients[2] + 1.96*sqrt(cov_mat[2,2])
+lower <- m1$coefficients[2] - 1.96*sqrt(cov_mat[2,2])
+```
+
+:::{.question}
+#### Question 1
+
+Repeat the code many times, and verify that the confidence intervals do indeed contain $\beta_1^*$ approximately 95% of the time.
+:::
+
+
+## Using the sandwich variance with a *correctly* specified model
+
+The simulations above (and in the prior class activity) show that the sandwich variance works with a mis-specified model. Importantly, we can also use the sandwich variance with a *correctly* specified model!
+
+To show that the sandwich variance works with a correctly specified model, we will generate data from a Poisson model, fit a Poisson regression for which all assumptions are met, and calculate a confidence interval for $\beta_1$:
+
+```{r, eval=F}
+n <- 500
+
+x <- rnorm(n)
+lambda <- exp(1 + x)
+y <- rpois(n, lambda)
+
+m1 <- glm(y ~ x, family = poisson)
+cov_mat <- sandwich(m1)
+
+upper <- m1$coefficients[2] + 1.96*sqrt(cov_mat[2,2])
+lower <- m1$coefficients[2] - 1.96*sqrt(cov_mat[2,2])
+```
+
+:::{.question}
+#### Question 2
+
+Repeat the code many times, and verify that the confidence intervals do indeed have approximately 95% coverage.
+
+:::
+
+
