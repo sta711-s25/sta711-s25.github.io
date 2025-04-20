@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+\usepackage{url}
+\usepackage{alltt}
+\usepackage{bm}
+\usepackage{bbm}
+\linespread{1}
+\textwidth 6.5in
+\oddsidemargin 0.in
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{2in}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{bbm}
+
+\begin{document}
+
+
+\begin{center}
+\Large
+STA 711 Homework 9\\
+\normalsize
+\vspace{5mm}
+\end{center}
+\noindent \textbf{Due:} Monday, April 28, 10:00pm on Canvas.\\ 
+
+\noindent \textbf{Instructions:} Submit your work as a single PDF. You may choose to either hand-write your work and submit a PDF scan, or type your work using LaTeX and submit the resulting PDF. See the course website for a \href{https://sta711-s25.github.io/homework/hw_template.tex}{homework template file} and \href{https://sta711-s25.github.io/homework/latex_instructions/}{instructions} on getting started with LaTeX and Overleaf.
+
+\section*{Estimation}
+
+
+\begin{enumerate}
+
+\item Let $X_1,...,X_n \overset{iid}{\sim} Poisson(\lambda)$. One estimator for $\lambda$ is $\widehat{\lambda} = \overline{X}$, which is unbiased. Use the fact that the variance of the Poisson distribution is also $\lambda$ to provide a second unbiased estimator for $\lambda$. Which of the two estimators has a smaller variance?
+
+\bigskip
+
+\item Let $X_1,...,X_n$ be an iid sample from a distribution with density
+
+$$f(x|\theta) = \theta x^{-2} \hspace{1cm} 0 < \theta \leq x < \infty$$
+
+Find the method of moments estimator for $\theta$.
+
+\bigskip
+
+\item Let $X_1,...,X_n \overset{iid}{\sim} Gamma(\alpha, \beta)$. Find the method of moments estimators for $\alpha$ and $\beta$.
+
+\bigskip
+
+\item Let $f_\theta$ be the density on $\mathbb{R}^2$ that is uniform on a disc of radius $\theta$. Let $X_1,...,X_n \overset{iid}{\sim} f_\theta$. Find a minimal sufficient statistic for $\theta$.
+
+\bigskip
+
+\item Let $X_1,...,X_n \overset{iid}{\sim} N(\mu, \sigma^2)$, and let 
+$$\widehat{\mu} = X_1$$
+Consider the sufficient statistic $T = \sum \limits_{i=1}^n X_i$ and the Rao-Blackwellized estimator
+$$\mu^* = \mathbb{E}[\widehat{\mu}_1 | T]$$
+
+\begin{enumerate}
+\item Compute $\mu^*$.
+
+\item Compare the variance of $\mu^*$ to the variance of $\widehat{\mu}$.
+
+\item Suppose instead you tried to use the estimator $\mathbb{E}[X_1 | X_2]$. What is wrong with this estimator?
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
