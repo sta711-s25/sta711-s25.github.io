@@ -1,0 +1,43 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Exploring multiple testing
+
+1. Use the following code to generate 100 samples $X_{i,1},...,X_{i,n} \overset{iid}{\sim} N(\mu_i, 1)$. For each sample, we test the hypotheses $H_{0,i}: \mu_i = 0$ vs. $H_{A,i}: \mu_i \neq 0$. In the code, the data is simulated such that $H_{0,i}$ is true for all $i$. If you reject each test $i$ when $p_i < 0.05$, how many type I errors do you make?
+
+```{r, eval=F}
+nsamp <- 100 # number of hypotheses to test
+n <- 50 # sample size for each hypothesis
+pvals <- rep(0, nsamp) # store p-values for each test
+for(i in 1:nsamp){
+  x <- rnorm(n) # sample N(0,1) data
+  test_stat <- sqrt(n)*mean(x) # test statistic
+  pvals[i] <- 2*pnorm(abs(test_stat), lower.tail=F) #p-value
+}
+```
+
+## Correcting for multiple testing issues
+
+The challenge with testing many hypotheses is that we may get many false positives! Indeed, if they are independent, we would expect that $\alpha \cdot 100\%$ of the hypotheses which are truly null, will be type I errors. 
+
+What can we do instead? Well, one option is to control a *different* error rate, instead of the probability of a type I error for each hypothesis. A common choice is the **familywise error rate** (FWER), which is the probability of making *any* type I errors across all our tests.
+
+Here are two different procedures for controlling the FWER, which we will discuss further in class (let $m$ denote the number of hypotheses total, and $\alpha$ the desired FWER):
+
+* The **Sidak** correction (assumes independent hypotheses): reject $H_{0,i}$ if $p_i < 1 - (1 - \alpha)^{1/m}$
+
+* The **Bonferroni** correction (makes no assumptions about independence): reject $H_{0,i}$ if $p_i < \alpha/m$
+
+2. Here the hypotheses are simulated to be independent, so the Sidak correction is reasonable. Apply the Sidak correction to your p-values from the simulated data. Do you make any type I errors?
+
+3. Repeat question 2 many times; each time, record whether you make a type I error. Approximately what proportion of the time do you make at least one type I error (that is, what is the approximate FWER)?
+
+4. Repeat question 3, but this time use the Bonferroni correction. How does the FWER compare to the Sidak correction?
+
+5. Now instead of simulating data under $H_0$, modify your code so that $\mu_{0,i} \neq 0$ for each $i$ (e.g., $\mu_{i,1} = 0.5$), and calculate the proportion of tests for which you reject the null hypothesis. Which correction -- Sidak or Bonferroni -- is more powerful?

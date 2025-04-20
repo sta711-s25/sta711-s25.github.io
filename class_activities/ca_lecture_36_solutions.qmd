@@ -1,0 +1,96 @@
+---
+title: "Class activity solutions"
+format: html
+editor: source
+author: "Ciaran Evans"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=F)
+knitr::opts_chunk$set(warning=F)
+```
+
+1.
+
+```{r}
+set.seed(11)
+nsamp <- 100 # number of hypotheses to test
+n <- 50 # sample size for each hypothesis
+pvals <- rep(0, nsamp) # store p-values for each test
+for(i in 1:nsamp){
+  x <- rnorm(n) # sample N(0,1) data
+  test_stat <- sqrt(n)*mean(x) # test statistic
+  pvals[i] <- 2*pnorm(abs(test_stat), lower.tail=F) #p-value
+}
+
+sum(pvals < 0.05)
+```
+
+4 type I errors
+
+2.
+
+```{r}
+sum(pvals < 1 - (1 - 0.05)^(1/nsamp))
+```
+
+No type I errors
+
+3 and 4.
+
+```{r}
+nsamp <- 100 # number of hypotheses to test
+n <- 50 # sample size for each hypothesis
+nsim <- 1000
+sidak_rejections <- rep(NA, nsim)
+bonferroni_rejections <- rep(NA, nsim)
+
+for(j in 1:nsim){
+  pvals <- rep(0, nsamp) # store p-values for each test
+  for(i in 1:nsamp){
+    x <- rnorm(n) # sample N(0,1) data
+    test_stat <- sqrt(n)*mean(x) # test statistic
+    pvals[i] <- 2*pnorm(abs(test_stat), lower.tail=F) #p-value
+  }
+  
+  sidak_rejections[j] <- sum(pvals < 1 - (1 - 0.05)^(1/nsamp))
+  bonferroni_rejections[j] <- sum(pvals < 0.05/nsamp)
+}
+
+mean(sidak_rejections > 0)
+mean(bonferroni_rejections > 0)
+
+```
+
+FWER is very slightly lower for Bonferroni (because the threshold is slightly more conservative).
+
+5.
+
+```{r}
+nsamp <- 100 # number of hypotheses to test
+n <- 50 # sample size for each hypothesis
+nsim <- 1000
+sidak_rejections <- rep(NA, nsim)
+bonferroni_rejections <- rep(NA, nsim)
+
+for(j in 1:nsim){
+  pvals <- rep(0, nsamp) # store p-values for each test
+  for(i in 1:nsamp){
+    x <- rnorm(n, mean=0.5) 
+    test_stat <- sqrt(n)*mean(x) # test statistic
+    pvals[i] <- 2*pnorm(abs(test_stat), lower.tail=F) #p-value
+  }
+  
+  sidak_rejections[j] <- sum(pvals < 1 - (1 - 0.05)^(1/nsamp))
+  bonferroni_rejections[j] <- sum(pvals < 0.05/nsamp)
+}
+
+mean(sidak_rejections/nsamp)
+mean(bonferroni_rejections/nsamp)
+
+```
+
+
+The Sidak correction is very slightly more powerful than the Bonferroni correction (again because the Bonferroni correction is slightly more conservative).
