@@ -1,0 +1,99 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+# Holm's procedure
+
+The code below generates 100 samples $X_{i,1},...,X_{i,n} \overset{iid}{\sim} N(\mu_i, 1)$. For each sample, we test the hypotheses $H_{0,i}: \mu_i = 0$ vs. $H_{A,i}: \mu_i \neq 0$. In the code, the data is simulated such that $H_{0,i}$ is true ($\mu_i = 0$) for 50 of the samples, and $H_{0,i}$ is false ($\mu_i = 0.5$) for the other 50 samples.
+
+```{r, eval=F}
+nsamp <- 100 # number of hypotheses to test
+n <- 50 # sample size for each hypothesis
+nsim <- 1000
+
+# true mean in each group
+group_means <- c(rep(0, 50), rep(0.5, 50))
+
+pvals <- rep(0, nsamp) # store p-values for each test
+for(i in 1:nsamp){
+  x <- rnorm(n, mean=group_means[i]) # sample data
+  test_stat <- sqrt(n)*mean(x) # test statistic
+  pvals[i] <- 2*pnorm(abs(test_stat), lower.tail=F) #p-value
+}
+```
+
+Since we are performing many tests, we need to modify our rejection decision to control the family-wise error rate (FWER). In R, this can be done by adjusting the p-values before comparing to the desired FWER $\alpha$.
+
+The code below uses the `p.adjust` function to adjust the p-values with the Bonferroni correction and with Holm's procedure:
+
+```{r, eval=F}
+pvals_bonferroni <- p.adjust(pvals, "bonferroni")
+pvals_holm <- p.adjust(pvals, "holm")
+```
+
+1. Plot the adjusted p-values against each other. Which p-values are larger, the ones adjusted by the Bonferroni correction or the ones adjusted by Holm's procedure?
+
+To control the FWER at level $\alpha = 0.05$, compare the adjusted p-values for each method with 0.05.
+
+2. How many hypotheses are rejected for each method?
+
+3. Of the 50 **true null hypotheses**, how many are rejected for each method? (i.e., how many type I errors?)
+
+4. Of the 50 **false null hypotheses**, how many are rejected for each method? (i.e. how many correct rejections?)
+
+
+## Iterating
+
+The code below repeats the simulation many times, and approximates the FWER and power for each method:
+
+```{r, eval=F}
+nsamp <- 100 # number of hypotheses to test
+n <- 50 # sample size for each hypothesis
+nsim <- 1000
+
+group_means <- c(rep(0, 50), rep(0.5, 50))
+
+t1_errors_bonferroni <- rep(NA, nsim)
+t1_errors_holm <- rep(NA, nsim)
+power_bonferroni <- rep(NA, nsim)
+power_holm <- rep(NA, nsim)
+
+for(j in 1:nsim){
+  pvals <- rep(0, nsamp) # store p-values for each test
+  for(i in 1:nsamp){
+    x <- rnorm(n, mean=group_means[i]) # sample data
+    test_stat <- sqrt(n)*mean(x) # test statistic
+    pvals[i] <- 2*pnorm(abs(test_stat), lower.tail=F) #p-value
+  }
+  
+  pvals_bonferroni <- p.adjust(pvals, "bonferroni")
+  pvals_holm <- p.adjust(pvals, "holm")
+  
+  t1_errors_bonferroni[j] <- sum(pvals_bonferroni[group_means == 0] < 0.05)
+  t1_errors_holm[j] <- sum(pvals_holm[group_means == 0] < 0.05)
+  
+  power_bonferroni[j] <- sum(pvals_bonferroni[group_means != 0] < 0.05)
+  power_holm[j] <- sum(pvals_holm[group_means != 0] < 0.05)
+}
+
+# FWER for each method
+mean(t1_errors_bonferroni > 0.05)
+mean(t1_errors_holm > 0.05)
+
+# power under H_A for each method
+mean(power_bonferroni)/50
+mean(power_holm)/50
+```
+
+5. Compare the FWER for each method. Do both methods control FWER at level 0.05? Which is more conservative?
+
+6. Which method is more powerful under $H_A$?
+
+7. Repeat with different numbers of true null hypotheses (i.e. instead of 50-50, try combinations like 80-20, 10-90, etc.). How do the results change?
+
+

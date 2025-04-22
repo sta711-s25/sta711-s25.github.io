@@ -1,0 +1,38 @@
+---
+title: "Lecture 37: FWER and Holm's procedure"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Recap: FWER and Bonferroni correction
+
+**Definition:** Suppose we test $m$ null hypotheses $H_{0,1},...,H_{0,m}$. The *family-wise error rate* is the probability of making *at least one* type I error:
+$$FWER = P \left( \bigcup \limits_{i: H_{0,i} \text{ is true}} \{\text{reject } H_{0,i}\} \right)$$
+
+\bigskip
+
+**Bonferroni correction:**
+
+\vspace{2cm}
+
+## Holm's procedure
+
+Suppose we test 5 hypotheses, and observe p-values 0.4, 0.01, 0, 0, 0. Does it still seem reasonable to use the Bonferroni cutoff $\alpha/5$ for each test?
+
+\vspace{6cm}
+
+## Holm's procedure
+
+Suppose we test $m$ null hypotheses $H_{0,1},...,H_{0,m}$. Let $p_i$ be the corresponding p-value for test $i$.
+
+* Order the p-values $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$
+* Let $i^* = \min \left\lbrace i: p_{(i)} > \frac{\alpha}{m - i + 1} \right\rbrace$
+* Reject $H_{0, (i)}$ for all $i < i^*$
+
+**Claim:** Holm's procedure controls FWER at level $\alpha$
+
+\vspace{5cm}
+
+
+
+
