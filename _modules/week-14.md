@@ -10,7 +10,8 @@ April 21
   : [HW 9](https://sta711-s25.github.io/homework/HW9.pdf)
         
 April 23
-: FWER, Bonferroni and Sidak corrections
+: FWER, Holm's method
+  : [Slides](https://sta711-s25.github.io/slides/lecture_37.pdf), [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_37.html)
 
 April 25
 : False discovery rate
