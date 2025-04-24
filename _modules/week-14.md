@@ -15,3 +15,4 @@ April 23
 
 April 25
 : False discovery rate
+  : [Slides](https://sta711-s25.github.io/slides/lecture_38.pdf), [Class activity](https://sta711-s25.github.io/class_activities/ca_lecture_38.html), [Class activity solutions](https://sta711-s25.github.io/class_activities/ca_lecture_38_solutions.html)

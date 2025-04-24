@@ -1,0 +1,35 @@
+---
+title: "Lecture 38: False discovery rate (FDR)"
+author: "Ciaran Evans"
+output: beamer_presentation
+---
+
+## Outcomes for multiple hypothesis tests
+
+
+## False discovery rate
+
+Suppose we test $m$ hypotheses, $m_0$ of which are truly null. Let $V$ denote the number of type I errors, and $R$ the total number of rejections. 
+
+$$FWER = P(V > 0) \hspace{1cm} FDR = \mathbb{E}[FDP]$$
+
+\vspace{4cm}
+
+
+## The Benjamini-Hochberg procedure
+
+Suppose we test $m$ null hypotheses $H_{0,1},...,H_{0,m}$. Let $p_i$ be the corresponding p-value for test $i$.
+
+* Order the p-values $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$
+* Let $i^* = \max \left\lbrace i: p_{(i)} < \frac{i\alpha}{m} \right\rbrace$
+* Reject $H_{0, (i)}$ for all $i \leq i^*$
+
+**Claim:** If the hypotheses are independent, BH controls FDR at level $\frac{m_0}{m}\alpha \leq \alpha$
+
+\vspace{4cm}
+
+## Summary
+
+* BH controls FDR at level $\frac{m_0}{m}\alpha$
+* If $m_0 = m$, then controlling FDR is equivalent to controlling FWER
+* If $m_0 < m$, then controlling FDR provides more power to reject $H_0$ when $H_0$ is false
