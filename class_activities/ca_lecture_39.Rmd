@@ -1,0 +1,55 @@
+---
+title: "Class Activity"
+output: 
+  rmdformats::robobook:
+    css: "homework.css"
+    highlight: pygments
+link-citations: yes
+---
+
+## The James-Stein estimator
+
+Suppose we observe a single observation $X \sim N(\mu, {\bf I})$ from a $d$-dimensional multivariate normal distribution. We wish to estimate
+
+$$\mu = (\mu_1, \mu_2, ..., \mu_d)^T$$
+
+The MLE is $\widehat{\mu}_{MLE} = X$. The James-Stein estimator is
+
+$$\widehat{\mu}_{JS} = \left(1 - \frac{d-2}{||X||^2} \right) X$$
+
+### Questions
+
+The code below simulates $X \sim N(0, {\bf I})$ when $d = 3$, and approximate the MSE of the two estimators:
+
+```{r, eval=F}
+library(MASS)
+
+d <- 3
+mu <- rep(0, d)
+sigma <- diag(d)
+
+nsim <- 10000
+diff_mle <- rep(NA, nsim)
+diff_js <- rep(NA, nsim)
+
+for(i in 1:nsim){
+  x <- mvrnorm(1, mu, sigma)
+  mle <- x
+  js <- (1 - (d-2)/sum(x^2))*x
+  
+  diff_mle[i] <- sum((mle - mu)^2)
+  diff_js[i] <- sum((js - mu)^2)
+}
+
+# MSE
+mean(diff_mle)
+mean(diff_js)
+```
+
+1. Which estimator has a lower MSE?
+
+2. How does the MSE of the two estimators change as we change $d$?
+
+3. So far, we have used $\mu = 0$. Try different, nonzero values for $\mu$. How does the MSE of the two estimators change as we change $\mu$?
+
+
